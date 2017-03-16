@@ -3,6 +3,7 @@ package com.inursoft.Automata;
 import com.sun.deploy.util.OrderedHashSet;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * Created by Anonymous on 2017. 3. 10..
@@ -12,8 +13,31 @@ public class CMR implements Serializable{
 
 
 
+    public float fitness = 0;
+
+
+
+    private Random rand = new Random();
+
+
 
     private OrderedHashSet conditions = new OrderedHashSet();
+
+
+
+    private GeneticCMR geneticCMR;
+
+
+
+
+    public CMR(GeneticCMR geneticCMR) {
+        if(geneticCMR != null)
+        {
+            conditions.add(new CellConditions());
+            this.geneticCMR = geneticCMR;
+        }
+    }
+
 
 
 
@@ -31,6 +55,24 @@ public class CMR implements Serializable{
     }
 
 
+
+
+
+    public void addNewCondition()
+    {
+
+    }
+
+
+
+
+    public OrderedHashSet getConditions() {
+        return conditions;
+    }
+
+
+
+
     private boolean isMatchCondition(CellConditions conditions, int east, int west, int center, int north, int south)
     {
         return conditions.east.matching(east) &&
@@ -44,7 +86,7 @@ public class CMR implements Serializable{
     /**
      * 값이 전이되는 조건입니다.
      */
-    public class CellConditions
+    public class CellConditions implements Serializable
     {
 
 
@@ -87,6 +129,17 @@ public class CMR implements Serializable{
          * 전이될 값
          */
         private int transValue;
+
+
+        public CellConditions()
+        {
+            east = new ConditionValue(geneticCMR);
+            west = new ConditionValue(geneticCMR);
+            center = new ConditionValue(geneticCMR);
+            north = new ConditionValue(geneticCMR);
+            south = new ConditionValue(geneticCMR);
+            transValue = rand.nextInt() % geneticCMR.getConditionMaxValue();
+        }
 
 
         private CellConditions(CellConditions cellConditions)
@@ -139,7 +192,29 @@ public class CMR implements Serializable{
             return new CellConditions(this);
         }
 
+        public ConditionValue getEast() {
+            return east;
+        }
 
+        public ConditionValue getWest() {
+            return west;
+        }
+
+        public ConditionValue getCenter() {
+            return center;
+        }
+
+        public ConditionValue getNorth() {
+            return north;
+        }
+
+        public ConditionValue getSouth() {
+            return south;
+        }
+
+        public int getTransValue() {
+            return transValue;
+        }
     }
 
 

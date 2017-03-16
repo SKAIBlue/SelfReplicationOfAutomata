@@ -1,6 +1,7 @@
 package com.inursoft.Automata;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * Created by Anonymous on 2017. 3. 10..
@@ -26,6 +27,13 @@ public class ConditionValue implements Serializable{
 
 
 
+    private GeneticCMR geneticCMR;
+
+
+
+
+    private Random rand = new Random();
+
 
     /**
      * 조건
@@ -43,8 +51,17 @@ public class ConditionValue implements Serializable{
 
 
 
+    public ConditionValue(GeneticCMR geneticCMR) {
+        this.geneticCMR = geneticCMR;
+        changeCondition(rand.nextInt());
+        setValue2(rand.nextInt());
+    }
+
+
+
+
     public void setValue2(int value2) {
-        this.value2 = value2;
+        this.value2 = value2 % geneticCMR.getConditionMaxValue();
     }
 
 
@@ -76,7 +93,7 @@ public class ConditionValue implements Serializable{
      */
     @Override
     protected ConditionValue clone() {
-        ConditionValue conditionValue = new ConditionValue();
+        ConditionValue conditionValue = new ConditionValue(geneticCMR);
         conditionValue.condition = condition;
         conditionValue.value2 = value2;
         return conditionValue;
