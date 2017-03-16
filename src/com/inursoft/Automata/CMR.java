@@ -41,6 +41,36 @@ public class CMR implements Serializable{
 
 
 
+    private CMR(CMR original)
+    {
+        this.geneticCMR = original.geneticCMR;
+        for(int i = 0 ; i < original.conditions.size(); i+=1)
+        {
+            CellConditions conditions = (CellConditions)original.conditions.get(i);
+            CellConditions newCondition = conditions.clone();
+            this.conditions.add(newCondition);
+        }
+    }
+
+
+
+    public void mutate()
+    {
+        if(rand.nextFloat() < geneticCMR.getNewMutation())
+        {
+
+        }
+        for(int i = 0 ; i < conditions.size(); i+=1)
+        {
+            CellConditions condition = (CellConditions)conditions.get(i);
+            condition.mutate();
+        }
+    }
+
+
+
+
+
     public int conditionMatch(int east, int west, int center, int north, int south)
     {
         for(int i = 0 ; i < conditions.size(); i+=1)
@@ -82,6 +112,11 @@ public class CMR implements Serializable{
                 conditions.south.matching(south);
     }
 
+
+    @Override
+    protected CMR clone(){
+        return new CMR(this);
+    }
 
     /**
      * 값이 전이되는 조건입니다.
@@ -192,31 +227,57 @@ public class CMR implements Serializable{
             return new CellConditions(this);
         }
 
+
+        /**
+         * 돌연변이
+         */
+        public void mutate()
+        {
+            east.mutate();
+            west.mutate();
+            center.mutate();
+            north.mutate();
+            south.mutate();
+
+            if(rand.nextFloat() < geneticCMR.getTransferValueMutation())
+            {
+                transValue = rand.nextInt() % geneticCMR.getConditionMaxValue() + 1;
+            }
+
+        }
+
+
+
         public ConditionValue getEast() {
             return east;
         }
+
 
         public ConditionValue getWest() {
             return west;
         }
 
+
         public ConditionValue getCenter() {
             return center;
         }
+
 
         public ConditionValue getNorth() {
             return north;
         }
 
+
         public ConditionValue getSouth() {
             return south;
         }
 
+
         public int getTransValue() {
             return transValue;
         }
-    }
 
+    }
 
 
 }

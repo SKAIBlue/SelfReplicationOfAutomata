@@ -35,4 +35,16 @@ class GeneticCMRTest {
         System.out.println(String.format("정렬에 걸린 시간: %d", time));
     }
 
+
+    @org.junit.jupiter.api.Test
+    void randomTest()
+    {
+        Random r= new Random();
+
+        for(int i = 0 ; i < 100 ; i += 1)
+        {
+            System.out.println(r.nextFloat());
+        }
+    }
+
 }

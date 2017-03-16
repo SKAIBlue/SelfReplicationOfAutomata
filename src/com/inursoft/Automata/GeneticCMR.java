@@ -3,6 +3,7 @@ package com.inursoft.Automata;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Anonymous on 2017. 3. 15..
@@ -60,6 +61,8 @@ public class GeneticCMR implements Serializable
     private List<CMR> cmrs = new ArrayList<>();
 
 
+    private Random rand = new Random();
+
 
 
     public GeneticCMR()
@@ -111,12 +114,24 @@ public class GeneticCMR implements Serializable
      */
     public void newGeneration()
     {
-        cmrs.clear();
         List<CMR> orderedCMR = sortByFitness(cmrs);
-        for(int i = 0 ; i < population; i += 1)
-        {
+        CMR highest = orderedCMR.get(0);
 
+        cmrs.clear();
+
+        for(int i = 0 ; i < population - staleSpecies; i += 1)
+        {
+            CMR newCMR = highest.clone();
+            newCMR.mutate();
+            cmrs.add(newCMR);
         }
+
+        for(int i = population - staleSpecies; i < population ; i+=1)
+        {
+            CMR newCMR = orderedCMR.get(rand.nextInt() % population).clone();
+            cmrs.add(newCMR);
+        }
+
     }
 
 
@@ -137,6 +152,7 @@ public class GeneticCMR implements Serializable
             }
         }
     }
+
 
 
 
