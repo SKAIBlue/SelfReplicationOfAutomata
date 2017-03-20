@@ -1,10 +1,9 @@
 package com.inursoft.Automata;
 
+import com.inursoft.Data.Consts;
+
 import javax.swing.*;
 import java.awt.*;
-
-import static com.inursoft.Data.Consts.WINDOWS_HEIGHT;
-import static com.inursoft.Data.Consts.WINDOWS_WIDTH;
 
 
 /**
@@ -16,31 +15,18 @@ public class WorldPanel extends JPanel {
     private Object sync = new Object();
 
 
-    private int boxWidth;
-
-
-
-    private int boxHeight;
-
-
 
     private ColorBinder binder;
 
 
-    private int[][] world;
 
+    private World world;
 
     /**
      * 셀이 활동하는 월드 입니다.
-     * @param width 월드의 최대 너비
-     * @param height 월드의 최대 높이
      */
-    public WorldPanel(int width, int height)
+    public WorldPanel()
     {
-
-        boxWidth = WINDOWS_WIDTH / width;
-        boxHeight = WINDOWS_HEIGHT / height;
-
         repaint();
     }
 
@@ -58,15 +44,15 @@ public class WorldPanel extends JPanel {
         synchronized (sync)
         {
             Graphics2D g2d = (Graphics2D)g;
-
-            for(int i = 0 ; i < world.length; i+=1)
+            int boxSize = Consts.WINDOWS_WIDTH / world.getWidth();
+            int heightCount = Consts.WINDOWS_HEIGHT / boxSize + 1;
+            for(int i = 0 ; i < heightCount; i+=1)
             {
-                int[] row = world[i];
-                for(int j = 0 ; j < row.length; j+=1)
+                for(int j = 0 ; j < world.getWidth(); j+=1)
                 {
-                    int value = row[j];
+                    int value = world.get(j, i);
                     g2d.setColor(Color.WHITE);
-                    g2d.drawRect(boxWidth * j, boxHeight * i, boxWidth * j + boxWidth, boxHeight * i + boxHeight);
+                    g2d.drawRect(boxSize * j, boxSize* i, boxSize* j + boxSize, boxSize* i + boxSize);
 
                     if(binder != null)
                     {
@@ -77,16 +63,16 @@ public class WorldPanel extends JPanel {
                         g2d.setColor(Color.LIGHT_GRAY);
                     }
 
-                    g2d.fillRect(boxWidth * j, boxHeight * i, boxWidth * j + boxWidth, boxHeight * i + boxHeight);
+                    g2d.fillRect(boxSize * j, boxSize* i, boxSize* j + boxSize, boxSize* i + boxSize);
                 }
             }
         }
     }
 
 
-    public void drawCells(Cells cells)
+    public void drawCells(World world)
     {
-        world = cells.getCells();
+        this.world = world;
         repaint();
     }
 
