@@ -33,7 +33,7 @@ public class CMR implements Serializable{
     public CMR(GeneticCMR geneticCMR) {
         if(geneticCMR != null)
         {
-            conditions.add(new CellConditions());
+            conditions.add(new CellConditions(geneticCMR));
             this.geneticCMR = geneticCMR;
         }
     }
@@ -124,6 +124,7 @@ public class CMR implements Serializable{
     public class CellConditions implements Serializable
     {
 
+        private GeneticCMR geneticCMR;
 
         /**
          * 동쪽 셀의 조건
@@ -166,8 +167,9 @@ public class CMR implements Serializable{
         private int transValue;
 
 
-        public CellConditions()
+        public CellConditions(GeneticCMR geneticCMR)
         {
+            this.geneticCMR = geneticCMR;
             east = new ConditionValue(geneticCMR);
             west = new ConditionValue(geneticCMR);
             center = new ConditionValue(geneticCMR);

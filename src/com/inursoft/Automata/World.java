@@ -25,7 +25,10 @@ public class World {
     private int height = 0;
 
 
-
+    public World(CMR cmr)
+    {
+        this.cmr = cmr;
+    }
 
 
     /**

@@ -20,7 +20,7 @@ class GeneticCMRTest {
             c.fitness = r.nextFloat();
             cmr.add(c);
         }
-        GeneticCMR geneticCMR = new GeneticCMR();
+        GeneticCMR geneticCMR = new GeneticCMR(0);
         long time = System.currentTimeMillis();
 
         List<CMR> sorted = geneticCMR.sortByFitness(cmr);

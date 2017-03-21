@@ -4,12 +4,13 @@ import com.inursoft.Data.Consts;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 
 /**
  * Created by Anonymous on 2017. 3. 6..
  */
-public class WorldPanel extends JPanel {
+public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
 
     private Object sync = new Object();
@@ -22,11 +23,30 @@ public class WorldPanel extends JPanel {
 
     private World world;
 
+
+
+    private World best;
+
+
+
+    private GeneticCMR gcmr = null;
+
+
+
+    private ArrayList<World> worlds = new ArrayList<>();
+
     /**
      * 셀이 활동하는 월드 입니다.
      */
     public WorldPanel()
     {
+        gcmr = GeneticCMR.load("test");
+        if(gcmr == null)
+        {
+            gcmr = new GeneticCMR(1000, 30, 10);
+        }
+        gcmr.setOnGenerateListener(this);
+        gcmr.generatedCMR();
         repaint();
     }
 
@@ -85,6 +105,16 @@ public class WorldPanel extends JPanel {
     {
         this.binder = binder;
     }
+
+
+    int a = 0;
+
+    @Override
+    public void onGenerate(CMR generatedCMR) {
+        worlds.add(new World(generatedCMR));
+    }
+
+
 
 
     /**

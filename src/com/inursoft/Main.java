@@ -16,7 +16,8 @@ public class Main {
 
     public static void main(String[] args) {
 
-        WorldPanel world = new WorldPanel(20, 20);
+
+        WorldPanel world = new WorldPanel();
 
         JFrame frame = new JFrame();
         frame.setResizable(false);

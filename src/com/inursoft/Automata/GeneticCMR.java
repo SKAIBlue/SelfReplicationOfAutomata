@@ -65,9 +65,10 @@ public class GeneticCMR implements Serializable
 
 
 
-    public GeneticCMR()
+    public GeneticCMR(int conditionMaxValue)
     {
-
+        this.conditionMaxValue = conditionMaxValue;
+        initialize();
     }
 
 
