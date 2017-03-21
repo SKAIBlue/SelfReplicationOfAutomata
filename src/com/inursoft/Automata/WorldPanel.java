@@ -25,10 +25,6 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
 
 
-    private World best;
-
-
-
     private GeneticCMR gcmr = null;
 
 
@@ -47,7 +43,13 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         }
         gcmr.setOnGenerateListener(this);
         gcmr.generatedCMR();
+        setColorBinder(value -> {
+            int color = 220 - (int)(220f * value / 10f);
+            return new Color(color, color, color);
+        });
         repaint();
+        AutoNextStateThread autoNextStateThread = new AutoNextStateThread();
+        autoNextStateThread.start();
     }
 
 
@@ -63,12 +65,15 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
         synchronized (sync)
         {
+
+            //printWorld(world);
+
             Graphics2D g2d = (Graphics2D)g;
             int boxSize = Consts.WINDOWS_WIDTH / world.getWidth();
             int heightCount = Consts.WINDOWS_HEIGHT / boxSize + 1;
-            for(int i = 0 ; i < heightCount; i+=1)
+            for(int i = 0 ; i <= heightCount; i+=1)
             {
-                for(int j = 0 ; j < world.getWidth(); j+=1)
+                for(int j = 0 ; j <= world.getWidth(); j+=1)
                 {
                     int value = world.get(j, i);
                     g2d.setColor(Color.WHITE);
@@ -107,11 +112,24 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
     }
 
 
-    int a = 0;
+
+
+    private int[][] pattern =
+            {
+                    {0, 0, 0, 0, 0, 0},
+                    {0, 2, 2, 2, 2, 0},
+                    {0, 2, 1, 1, 2, 0},
+                    {0, 2, 1, 1, 2, 0},
+                    {0, 2, 2, 2, 2, 0},
+                    {0, 0, 0, 0, 0, 0}
+            };
 
     @Override
     public void onGenerate(CMR generatedCMR) {
-        worlds.add(new World(generatedCMR));
+        World world = new World(generatedCMR);
+        world.put(pattern);
+        worlds.add(world);
+        this.world = world;
     }
 
 
@@ -127,7 +145,62 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
     }
 
+    private void printWorld(World world)
+    {
+        int[][] p = world.toIntArray();
+        StringBuilder build = new StringBuilder();
+        for(int i = 0 ; i < p.length; i+=1)
+        {
+            int[] ip = p[i];
+            for(int j = 0 ; j < ip.length;j+=1)
+            {
+                build.append(String.format("%2d", ip[j]));
+            }
+            build.append("\n");
+        }
+        System.out.println(build.toString());
+    }
 
 
+    private class AutoNextStateThread extends Thread
+    {
+
+
+
+        @Override
+        public void run() {
+            for(int generate = 0 ; generate < 20000; generate += 1)
+            {
+                for(int iterate = 0 ; iterate < 100; iterate +=1)
+                {
+                    int best = 0;
+                    int bestIndex = 0;
+                    for(int i = 0 ; i < worlds.size() ; i+=1)
+                    {
+                        World world = worlds.get(i);
+                        world.nextState();
+                        int count = world.getPatternCount(pattern);
+                        world.cmr.fitness = count;
+                        if(best < count)
+                        {
+                            best = count;
+                            bestIndex = i;
+                        }
+                    }
+                    world = worlds.get(bestIndex);
+
+                    if(world.cmr.fitness > 1)
+                    {
+                        repaint();
+                    }
+                }
+                System.out.println("Generation: " + generate );
+                gcmr.newGeneration();
+                worlds.clear();
+                gcmr.generatedCMR();
+            }
+        }
+
+    }
 
 }

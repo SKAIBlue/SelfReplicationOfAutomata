@@ -14,13 +14,10 @@ public class ConditionValue implements Serializable{
     private static ICondition EQ = new Equals();
 
 
-    private static ICondition LT = new Lower();
+    private static ICondition NE = new NotEquals();
 
 
     private static ICondition LTE = new LowerOrEqual();
-
-
-    private static ICondition GT = new Greater();
 
 
     private static ICondition GTE = new GreaterOrEqual();
@@ -156,17 +153,15 @@ public class ConditionValue implements Serializable{
      */
     public void changeCondition(int bindValue)
     {
-        switch (bindValue % 5)
+        switch (bindValue % 4)
         {
             case 0:
                 condition = EQ;
             case 1:
-                condition = LT;
+                condition = NE;
             case 2:
                 condition = LTE;
             case 3:
-                condition = GT;
-            case 4:
                 condition = GTE;
         }
 
@@ -185,6 +180,18 @@ public class ConditionValue implements Serializable{
     }
 
 
+    /**
+     * Value 1 and value2 are Not Equals
+     */
+    private static class NotEquals implements ICondition
+    {
+
+        @Override
+        public boolean condition(int value1, int value2) {
+            return value1 != value2;
+        }
+    }
+
 
     /**
      * value1 and value2 are Equals
@@ -202,19 +209,6 @@ public class ConditionValue implements Serializable{
 
 
 
-    /**
-     * value1 is lower then value2
-     */
-    private static class Lower implements ICondition
-    {
-
-        @Override
-        public boolean condition(int value1, int value2) {
-            return value1 < value2;
-        }
-    }
-
-
 
     /**
      * value1 is lower then value2 or equals
@@ -229,18 +223,6 @@ public class ConditionValue implements Serializable{
     }
 
 
-
-    /**
-     * value1 is greater then value2
-     */
-    private static class Greater implements ICondition
-    {
-
-        @Override
-        public boolean condition(int value1, int value2) {
-            return value1 > value2;
-        }
-    }
 
 
 

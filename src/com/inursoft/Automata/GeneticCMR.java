@@ -129,7 +129,7 @@ public class GeneticCMR implements Serializable
 
         for(int i = population - staleSpecies; i < population ; i+=1)
         {
-            CMR newCMR = orderedCMR.get(rand.nextInt() % population).clone();
+            CMR newCMR = orderedCMR.get(Math.abs(rand.nextInt() % population)).clone();
             cmrs.add(newCMR);
         }
 

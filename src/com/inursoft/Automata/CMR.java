@@ -58,6 +58,7 @@ public class CMR implements Serializable{
     {
         if(rand.nextFloat() < geneticCMR.getNewMutation())
         {
+            addNewCondition();
 
         }
         for(int i = 0 ; i < conditions.size(); i+=1)
@@ -81,7 +82,7 @@ public class CMR implements Serializable{
                 return condition.transValue;
             }
         }
-        return 0;
+        return center;
     }
 
 
@@ -90,7 +91,7 @@ public class CMR implements Serializable{
 
     public void addNewCondition()
     {
-
+        conditions.add(new CellConditions(geneticCMR));
     }
 
 
@@ -181,6 +182,7 @@ public class CMR implements Serializable{
 
         private CellConditions(CellConditions cellConditions)
         {
+            this.geneticCMR = cellConditions.geneticCMR;
             east = cellConditions.east.clone();
             west = cellConditions.west.clone();
             center = cellConditions.center.clone();

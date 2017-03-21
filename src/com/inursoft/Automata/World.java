@@ -39,20 +39,14 @@ public class World {
      */
     public void put(Point p, int value)
     {
-        if(value == 0)
-        {
-            worldMap.remove(p);
-            return;
-        }
-
         if(p.getX() > width)
         {
-            width = p.getX();
+            width = p.getX() + 1;
         }
 
         if(p.getY() > height)
         {
-            height = p.getY();
+            height = p.getY() + 1;
         }
 
         worldMap.put(p, value);
@@ -81,13 +75,10 @@ public class World {
         for(int i = 0 ; i < array.length ; i+=1)
         {
             int[] inner = array[i];
-            for(int j = 0; j < array.length; j+=1)
+            for(int j = 0; j < inner.length; j+=1)
             {
                 int value = inner[j];
-                if(value != 0)
-                {
-                    put(j, i, value);
-                }
+                put(j, i, value);
             }
         }
     }
@@ -237,10 +228,9 @@ public class World {
             for(int j = 0 ; j < width; j+=1)
             {
                 int value = worldArray[i][j];
-                if( value != 0 )
-                {
-                    map.put(new Point(j, i), value);
-                }
+
+                map.put(new Point(j, i), value);
+
             }
         }
         return map;
