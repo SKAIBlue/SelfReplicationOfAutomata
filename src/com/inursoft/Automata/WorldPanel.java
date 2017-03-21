@@ -39,7 +39,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         gcmr = GeneticCMR.load("test");
         if(gcmr == null)
         {
-            gcmr = new GeneticCMR(1000, 30, 10);
+            gcmr = new GeneticCMR(8, 4, 10);
         }
         gcmr.setOnGenerateListener(this);
         gcmr.generatedCMR();
@@ -161,11 +161,10 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         System.out.println(build.toString());
     }
 
+    float maxfitness = 0;
 
     private class AutoNextStateThread extends Thread
     {
-
-
 
         @Override
         public void run() {
@@ -187,12 +186,19 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
                             bestIndex = i;
                         }
                     }
-                    world = worlds.get(bestIndex);
 
-                    if(world.cmr.fitness > 1)
+                    if(maxfitness < world.cmr.fitness)
                     {
+                        maxfitness = world.cmr.fitness;
+                        world = worlds.get(bestIndex);
+                        System.out.println("max fitness change: " + maxfitness);
                         repaint();
                     }
+                    //System.out.println(world.cmr.fitness);
+                    //if(world.cmr.fitness > 1)
+                    //{
+                        //repaint();
+                    //}
                 }
                 System.out.println("Generation: " + generate );
                 gcmr.newGeneration();

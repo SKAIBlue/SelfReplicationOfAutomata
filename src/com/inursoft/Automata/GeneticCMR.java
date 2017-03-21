@@ -20,7 +20,7 @@ public class GeneticCMR implements Serializable
     /**
      *
      */
-    private int staleSpecies = 30;
+    private int randomSelect = 30;
 
 
     /**
@@ -32,27 +32,27 @@ public class GeneticCMR implements Serializable
     /**
      * 새로운 조건이 생길 돌연변이 확률
      */
-    private float newMutation = 0.3f;
+    private float newMutation = 0.5f;
 
 
     /**
      * 조건이 변경될 돌연변이 확률
      */
-    private float conditionMutation = 0.15f;
+    private float conditionMutation = 0.5f;
 
 
 
     /**
      * 전이값이 변경될 돌연변이 확률
      */
-    private float transferValueMutation = 0.15f;
+    private float transferValueMutation = 0.5f;
 
 
 
     /**
      * 조건 값이 변경될 돌연변이 확률
      */
-    private float valueMutation = 0.15f;
+    private float valueMutation = 0.5f;
 
 
     private OnGenerateListener generateListener;
@@ -76,7 +76,7 @@ public class GeneticCMR implements Serializable
 
     public GeneticCMR(int population, int staleSpecies, int conditionMaxValue) {
         this.population = population;
-        this.staleSpecies = staleSpecies;
+        this.randomSelect = staleSpecies;
         this.conditionMaxValue = conditionMaxValue;
         initialize();
     }
@@ -86,7 +86,7 @@ public class GeneticCMR implements Serializable
 
     public GeneticCMR(int population, int staleSpecies, int conditionMaxValue, float newMutation, float conditionMutation, float transferValueMutation, float valueMutation, List<CMR> cmrs) {
         this.population = population;
-        this.staleSpecies = staleSpecies;
+        this.randomSelect = staleSpecies;
         this.conditionMaxValue = conditionMaxValue;
         this.newMutation = newMutation;
         this.conditionMutation = conditionMutation;
@@ -115,21 +115,24 @@ public class GeneticCMR implements Serializable
      */
     public void newGeneration()
     {
-        List<CMR> orderedCMR = sortByFitness(cmrs);
-        CMR highest = orderedCMR.get(0);
 
-        cmrs.clear();
 
-        for(int i = 0 ; i < population - staleSpecies; i += 1)
+        List<CMR> selected = new ArrayList<>();
+
+
+        for(int i = 0 ; i < randomSelect ; i+=1)
         {
-            CMR newCMR = highest.clone();
-            newCMR.mutate();
-            cmrs.add(newCMR);
+            int randIdx = Math.abs(rand.nextInt() % cmrs.size());
+            selected.add(cmrs.get(randIdx));
+            cmrs.remove(randIdx);
         }
 
-        for(int i = population - staleSpecies; i < population ; i+=1)
+        CMR best = sortByFitness(selected).get(0);
+
+        for(int i = 0 ; i < population; i += 1)
         {
-            CMR newCMR = orderedCMR.get(Math.abs(rand.nextInt() % population)).clone();
+            CMR newCMR = best.clone();
+            newCMR.mutate();
             cmrs.add(newCMR);
         }
 
@@ -251,8 +254,8 @@ public class GeneticCMR implements Serializable
         return population;
     }
 
-    public int getStaleSpecies() {
-        return staleSpecies;
+    public int getRandomSelect() {
+        return randomSelect;
     }
 
     public int getConditionMaxValue() {

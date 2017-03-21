@@ -39,12 +39,12 @@ public class World {
      */
     public void put(Point p, int value)
     {
-        if(p.getX() > width)
+        if(p.getX() > width - 1)
         {
             width = p.getX() + 1;
         }
 
-        if(p.getY() > height)
+        if(p.getY() > height - 1)
         {
             height = p.getY() + 1;
         }
@@ -140,32 +140,22 @@ public class World {
         int patternWidth = pattern[0].length;
         int patternHeight = pattern.length;
 
-        for(int i = 0 ; i < height - patternHeight; i+=1)
+        for(int i = 0 ; i <= height ; i+=patternHeight)
         {
-            for(int j = 0; j < width - patternWidth; j+=1)
+            for(int j = 0; j <= width ; j+=patternWidth)
             {
-                boolean isCount = true;
                 for(int k = 0 ; k < patternHeight; k+=1)
                 {
                     for(int l = 0 ; l < patternWidth; l+=1)
                     {
+                        int x = j + l;
+                        int y = i + k;
 
-                        if(world[j + k][i + l] != pattern[k][l])
+                        if(y < height && x < width && world[y][x] == pattern[k][l])
                         {
-                            isCount = false;
-                            break;
+                            count += 1;
                         }
-
                     }
-
-                    if(!isCount)
-                    {
-                        break;
-                    }
-                }
-                if(isCount)
-                {
-                    count +=1;
                 }
             }
         }
