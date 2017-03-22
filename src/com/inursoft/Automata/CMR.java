@@ -62,7 +62,7 @@ public class CMR implements Serializable{
         }
         else
         {
-            for(int i = 0 ; i < conditions.size(); i+=1)
+            for(int i = conditions.size() - 1 ; i >= 0; i-=1)
             {
                 CellConditions condition = (CellConditions)conditions.get(i);
                 if(condition.mutate())

@@ -11,6 +11,9 @@ import java.util.Random;
 public class GeneticCMR implements Serializable
 {
 
+    private int generation = 0;
+
+
     /**
      * 개수
      */
@@ -126,7 +129,7 @@ public class GeneticCMR implements Serializable
             selected.add(cmrs.get(randIdx));
             cmrs.remove(randIdx);
         }
-
+        cmrs.clear();
         CMR best = sortByFitness(selected).get(0);
 
         for(int i = 0 ; i < population; i += 1)
@@ -214,6 +217,7 @@ public class GeneticCMR implements Serializable
             FileOutputStream fos = new FileOutputStream(String.format("%s.gcmr", fileName), false);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(this);
+            oos.close();
         } catch (FileNotFoundException e) {
             System.out.println("파일을 찾을 수 없습니다.");
         } catch (IOException e) {
@@ -236,7 +240,9 @@ public class GeneticCMR implements Serializable
         try {
             FileInputStream fis = new FileInputStream(String.format("%s.gcmr", fileName));
             ObjectInputStream ois = new ObjectInputStream(fis);
-            return (GeneticCMR) ois.readObject();
+            GeneticCMR cmr = (GeneticCMR) ois.readObject();
+            ois.close();
+            return cmr;
         } catch (FileNotFoundException e) {
             System.out.println("저장된 파일을 찾을 수 없습니다.");
         } catch (IOException e) {
@@ -278,6 +284,10 @@ public class GeneticCMR implements Serializable
         return valueMutation;
     }
 
+
+    public int getGeneration() {
+        return generation;
+    }
 
     public void setOnGenerateListener(OnGenerateListener generateListener) {
         this.generateListener = generateListener;
