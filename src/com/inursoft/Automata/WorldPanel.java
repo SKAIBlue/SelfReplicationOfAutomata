@@ -172,13 +172,13 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
             {
                 for(int iterate = 0 ; iterate < 100; iterate +=1)
                 {
-                    int best = 0;
+                    float best = 0;
                     int bestIndex = 0;
                     for(int i = 0 ; i < worlds.size() ; i+=1)
                     {
                         World world = worlds.get(i);
                         world.nextState();
-                        int count = world.getPatternCount(pattern);
+                        float count = world.getPatternFitness(pattern);
                         world.cmr.fitness = count;
                         if(best < count)
                         {
@@ -189,7 +189,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
                     if(maxfitness < world.cmr.fitness)
                     {
-                        maxfitness = world.cmr.fitness;
+                        maxfitness = world.cmr.fitness / (world.getWidth() * world.getHeight());
                         world = worlds.get(bestIndex);
                         System.out.println("max fitness change: " + maxfitness);
                         gcmr.save("test");

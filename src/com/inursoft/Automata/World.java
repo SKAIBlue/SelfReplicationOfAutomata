@@ -133,29 +133,40 @@ public class World {
      * @param pattern 패턴
      * @return 찾은 패턴의 수
      */
-    public int getPatternCount(int[][] pattern)
+    public float getPatternFitness(int[][] pattern)
     {
         int[][] world = toIntArray();
-        int count = 0;
+        float count = 0;
         int patternWidth = pattern[0].length;
         int patternHeight = pattern.length;
-
+        int patternAreaSize = patternWidth * patternHeight;
+        boolean oneTime = false;
         for(int i = 0 ; i <= height ; i+=patternHeight)
         {
             for(int j = 0; j <= width ; j+=patternWidth)
             {
+                int incount = 0;
                 for(int k = 0 ; k < patternHeight; k+=1)
                 {
+
                     for(int l = 0 ; l < patternWidth; l+=1)
                     {
                         int x = j + l;
                         int y = i + k;
-
                         if(y < height && x < width && world[y][x] == pattern[k][l])
                         {
-                            count += 1;
+                            incount += 1;
                         }
                     }
+                }
+                if(incount == patternAreaSize)
+                {
+                    count += 1;
+                }
+                else if(!oneTime)
+                {
+                    oneTime = true;
+                    count += ((float)incount / patternAreaSize);
                 }
             }
         }

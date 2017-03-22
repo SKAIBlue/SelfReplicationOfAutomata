@@ -25,8 +25,8 @@ class WorldTest {
                 };
         World world = new World(null);
         world.put(worldPattern);
-        System.out.println(world.getPatternCount(pattern));
-        assert world.getPatternCount(pattern) == 29;
+        System.out.println(world.getPatternFitness(pattern));
+        assert world.getPatternFitness(pattern) == 29;
     }
 
 }
