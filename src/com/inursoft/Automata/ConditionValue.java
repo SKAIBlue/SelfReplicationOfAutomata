@@ -83,16 +83,19 @@ public class ConditionValue implements Serializable{
 
 
 
-    public void mutate()
+    public boolean mutate()
     {
         if(rand.nextFloat() < geneticCMR.getConditionMutation())
         {
             changeCondition(rand.nextInt());
+            return true;
         }
-        if(rand.nextFloat() < geneticCMR.getValueMutation())
+        else if(rand.nextFloat() < geneticCMR.getValueMutation())
         {
             setValue2(rand.nextInt());
+            return true;
         }
+        return false;
     }
 
 
