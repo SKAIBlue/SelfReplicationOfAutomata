@@ -168,7 +168,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
         @Override
         public void run() {
-            for(int generate = 0 ; generate < 2000000; generate += 1)
+            while(gcmr.getGeneration() < 2000000)
             {
                 for(int iterate = 0 ; iterate < 100; iterate +=1)
                 {
@@ -201,11 +201,11 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
                         //repaint();
                     //}
                 }
-                if(generate % 1000 == 0)
+                if(gcmr.getGeneration() % 1000 == 0)
                 {
                     gcmr.save("test");
                 }
-                System.out.println("Generation: " + generate );
+                System.out.println("Generation: " + gcmr.getGeneration() );
                 gcmr.newGeneration();
                 worlds.clear();
                 gcmr.generatedCMR();

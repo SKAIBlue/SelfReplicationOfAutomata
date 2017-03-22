@@ -11,6 +11,8 @@ import java.util.Random;
 public class GeneticCMR implements Serializable
 {
 
+    private int generation = 0;
+
     /**
      * 개수
      */
@@ -115,7 +117,7 @@ public class GeneticCMR implements Serializable
      */
     public void newGeneration()
     {
-
+        generation += 1;
 
         List<CMR> selected = new ArrayList<>();
 
@@ -278,6 +280,9 @@ public class GeneticCMR implements Serializable
         return valueMutation;
     }
 
+    public int getGeneration() {
+        return generation;
+    }
 
     public void setOnGenerateListener(OnGenerateListener generateListener) {
         this.generateListener = generateListener;
