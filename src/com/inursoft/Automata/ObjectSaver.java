@@ -15,9 +15,7 @@ public class ObjectSaver {
             oos.writeObject(obj);
             oos.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
         }
 
     }
@@ -32,11 +30,8 @@ public class ObjectSaver {
             ois.close();
             return res;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
         return null;
     }

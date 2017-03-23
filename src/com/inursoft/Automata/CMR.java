@@ -185,7 +185,7 @@ public class CMR implements Serializable{
             center = new ConditionValue(geneticCMR);
             north = new ConditionValue(geneticCMR);
             south = new ConditionValue(geneticCMR);
-            transValue = Math.abs(rand.nextInt() % geneticCMR.getConditionMaxValue());
+            transValue = Math.abs(rand.nextInt() % 2);
         }
 
 

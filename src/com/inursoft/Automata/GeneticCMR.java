@@ -125,7 +125,9 @@ public class GeneticCMR implements Serializable
         for(int i = 0 ; i < randomSelect ; i+=1)
         {
             int randIdx = Math.abs(rand.nextInt() % sorted.size());
-            cmrs.add(sorted.get(randIdx).clone());
+            CMR newCMR = sorted.get(randIdx).clone();
+            newCMR.mutate();
+            cmrs.add(newCMR);
             sorted.remove(randIdx);
         }
 

@@ -50,7 +50,7 @@ public class ConditionValue implements Serializable{
     public ConditionValue(GeneticCMR geneticCMR) {
         this.geneticCMR = geneticCMR;
         changeCondition(rand.nextInt());
-        setValue2(rand.nextInt());
+        setValue2(Math.abs(rand.nextInt() % 2));
     }
 
 
