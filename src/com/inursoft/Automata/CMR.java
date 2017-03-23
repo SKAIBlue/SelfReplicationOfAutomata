@@ -1,8 +1,9 @@
 package com.inursoft.Automata;
 
-import com.sun.deploy.util.OrderedHashSet;
-
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -21,7 +22,10 @@ public class CMR implements Serializable{
 
 
 
-    private OrderedHashSet conditions = new OrderedHashSet();
+    private HashSet<CellConditions> conditions = new HashSet<>();
+
+
+    private List<CellConditions> conditionList = new ArrayList<>();
 
 
 
@@ -44,9 +48,9 @@ public class CMR implements Serializable{
     private CMR(CMR original)
     {
         this.geneticCMR = original.geneticCMR;
-        for(int i = 0 ; i < original.conditions.size(); i+=1)
+        for(int i = 0 ; i < original.conditionList.size(); i+=1)
         {
-            CellConditions conditions = (CellConditions)original.conditions.get(i);
+            CellConditions conditions = original.conditionList.get(i);
             CellConditions newCondition = conditions.clone();
             this.conditions.add(newCondition);
         }
@@ -62,9 +66,9 @@ public class CMR implements Serializable{
         }
         else
         {
-            for(int i = conditions.size() - 1 ; i >= 0; i-=1)
+            for(int i = conditionList.size() - 1 ; i >= 0; i-=1)
             {
-                CellConditions condition = (CellConditions)conditions.get(i);
+                CellConditions condition = conditionList.get(i);
                 if(condition.mutate())
                 {
                     break;
@@ -80,9 +84,9 @@ public class CMR implements Serializable{
 
     public int conditionMatch(int east, int west, int center, int north, int south)
     {
-        for(int i = 0 ; i < conditions.size(); i+=1)
+        for(int i = 0 ; i < conditionList.size(); i+=1)
         {
-            CellConditions condition = (CellConditions) conditions.get(i);
+            CellConditions condition = conditionList.get(i);
             if(isMatchCondition(condition, east, west, center, north, south))
             {
                 return condition.transValue;
@@ -97,14 +101,9 @@ public class CMR implements Serializable{
 
     public void addNewCondition()
     {
-        conditions.add(new CellConditions(geneticCMR));
-    }
-
-
-
-
-    public OrderedHashSet getConditions() {
-        return conditions;
+        CellConditions condition = new CellConditions(geneticCMR);
+        conditions.add(condition);
+        conditionList.add(condition);
     }
 
 
@@ -118,6 +117,13 @@ public class CMR implements Serializable{
                 conditions.north.matching(north) &&
                 conditions.south.matching(south);
     }
+
+
+
+    public List<CellConditions> getConditionList() {
+        return conditionList;
+    }
+
 
 
     @Override
@@ -182,7 +188,7 @@ public class CMR implements Serializable{
             center = new ConditionValue(geneticCMR);
             north = new ConditionValue(geneticCMR);
             south = new ConditionValue(geneticCMR);
-            transValue = rand.nextInt() % geneticCMR.getConditionMaxValue();
+            transValue = Math.abs(rand.nextInt() % geneticCMR.getConditionMaxValue());
         }
 
 
@@ -233,6 +239,15 @@ public class CMR implements Serializable{
 
 
         @Override
+        public String toString() {
+            return "east=" + east +
+                    ", west=" + west +
+                    ", center=" + center +
+                    ", north=" + north +
+                    ", south=" + south;
+        }
+
+        @Override
         protected CellConditions clone(){
             return new CellConditions(this);
         }
@@ -266,7 +281,7 @@ public class CMR implements Serializable{
 
             if(rand.nextFloat() < geneticCMR.getTransferValueMutation())
             {
-                transValue = rand.nextInt() % geneticCMR.getConditionMaxValue() + 1;
+                transValue = Math.abs(rand.nextInt() % geneticCMR.getConditionMaxValue()) + 1;
                 return true;
             }
             return false;

@@ -4,6 +4,7 @@ import com.inursoft.Automata.WorldPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Scanner;
 
 import static com.inursoft.Data.Consts.*;
 
@@ -16,8 +17,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-
-        WorldPanel world = new WorldPanel();
+        Scanner scan = new Scanner(System.in);
+        System.out.print("1. 찾기\n2. 베스트 변화 보기\n> ");
+        int input = scan.nextInt();
+        WorldPanel world = new WorldPanel(input);
 
         JFrame frame = new JFrame();
         frame.setResizable(false);

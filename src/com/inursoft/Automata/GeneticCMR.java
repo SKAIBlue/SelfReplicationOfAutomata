@@ -55,7 +55,7 @@ public class GeneticCMR implements Serializable
     private float valueMutation = 0.5f;
 
 
-    private OnGenerateListener generateListener;
+    private transient OnGenerateListener generateListener;
 
 
     private List<CMR> cmrs = new ArrayList<>();
@@ -210,17 +210,7 @@ public class GeneticCMR implements Serializable
      */
     public void save(String fileName)
     {
-        try {
-            FileOutputStream fos = new FileOutputStream(String.format("%s.gcmr", fileName), false);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(this);
-            oos.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("파일을 찾을 수 없습니다.");
-        } catch (IOException e) {
-            System.out.println("입출력 오류가 발생하였습니다.");
-        }
-
+        ObjectSaver.save(this, String.format("%s.gcmr", fileName));
     }
 
 
@@ -234,22 +224,7 @@ public class GeneticCMR implements Serializable
      */
     public static GeneticCMR load(String fileName)
     {
-        try {
-            FileInputStream fis = new FileInputStream(String.format("%s.gcmr", fileName));
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            GeneticCMR cmr = (GeneticCMR) ois.readObject();
-            ois.close();
-            return cmr;
-        } catch (FileNotFoundException e) {
-            System.out.println("저장된 파일을 찾을 수 없습니다.");
-        } catch (IOException e) {
-            System.out.println("입출력 오류가 발생하였습니다.");
-        } catch (ClassNotFoundException e) {
-            System.out.println("일치하는 클래스가 존재하지 않습니다.");
-        } catch (ClassCastException e) {
-            System.out.println("클래스를 변환할 수 없습니다. 잘못된 데이터 같습니다.");
-        }
-        return null;
+        return (GeneticCMR)ObjectSaver.load(String.format("%s.gcmr", fileName));
     }
 
 

@@ -34,22 +34,60 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
     /**
      * 셀이 활동하는 월드 입니다.
      */
-    public WorldPanel()
+    public WorldPanel(int input)
+    {
+        switch (input)
+        {
+            case 1:
+                generation();
+                break;
+            case 2:
+                showBest();
+                break;
+        }
+
+    }
+
+    private void generation()
     {
         gcmr = GeneticCMR.load("test");
+        initGeneticCMR();
+        setColorBinder(value -> {
+            int color = 220 - (int)(220f * value / 10f);
+            return new Color(color, color, color);
+        });
+        repaint();
+        GenerateThread generateThread = new GenerateThread();
+        generateThread.start();
+    }
+
+    private void initGeneticCMR()
+    {
         if(gcmr == null)
         {
             gcmr = new GeneticCMR(8, 4, 10);
         }
         gcmr.setOnGenerateListener(this);
         gcmr.generatedCMR();
-        setColorBinder(value -> {
-            int color = 220 - (int)(220f * value / 10f);
-            return new Color(color, color, color);
-        });
-        repaint();
-        AutoNextStateThread autoNextStateThread = new AutoNextStateThread();
-        autoNextStateThread.start();
+
+    }
+
+    private void showBest()
+    {
+        CMR cmr = (CMR)ObjectSaver.load("best.cmr");
+        if(cmr != null)
+        {
+            world = new World(cmr);
+            world.put(pattern);
+            setColorBinder(value -> {
+                int color = 220 - (int)(220f * value / 10f);
+                return new Color(color, color, color);
+            });
+            repaint();
+            AutoNextStateThread thread = new AutoNextStateThread();
+            thread.start();
+        }
+
     }
 
 
@@ -116,12 +154,13 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
     private int[][] pattern =
             {
-                    {0, 0, 0, 0, 0, 0},
-                    {0, 2, 2, 2, 2, 0},
-                    {0, 2, 1, 1, 2, 0},
-                    {0, 2, 1, 1, 2, 0},
-                    {0, 2, 2, 2, 2, 0},
-                    {0, 0, 0, 0, 0, 0}
+                    {0, 0, 0, 0, 0, 0, 0},
+                    {0, 0, 1, 1, 3, 0, 0},
+                    {0, 3, 2, 2, 2, 1, 0},
+                    {0, 1, 2, 1, 2, 1, 0},
+                    {0, 1, 2, 2, 2, 3, 0},
+                    {0, 0, 3, 1, 1, 0, 0},
+                    {0, 0, 0, 0, 0, 0, 0}
             };
 
     @Override
@@ -165,52 +204,81 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
     private class AutoNextStateThread extends Thread
     {
+        @Override
+        public void run() {
+            long stateCount = 0;
+            while(true)
+            {
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                world.nextState();
+                System.out.println("Count: " + stateCount);
+                //printWorld(world);
+                repaint();
+                stateCount+=1;
+            }
+        }
+    }
+
+
+    private class GenerateThread extends Thread
+    {
 
         @Override
         public void run() {
-            while(gcmr.getGeneration() < 2000000)
+            while(true)
             {
-                for(int iterate = 0 ; iterate < 100; iterate +=1)
+                while(gcmr.getGeneration() < 2000000)
                 {
-                    float best = 0;
-                    int bestIndex = 0;
-                    for(int i = 0 ; i < worlds.size() ; i+=1)
+                    for(int iterate = 0 ; iterate < 100; iterate +=1)
                     {
-                        World world = worlds.get(i);
-                        world.nextState();
-                        float count = world.getPatternFitness(pattern);
-                        world.cmr.fitness = count;
-                        if(best < count)
+                        float best = 0;
+                        int bestIndex = 0;
+                        for(int i = 0 ; i < worlds.size() ; i+=1)
                         {
-                            best = count;
-                            bestIndex = i;
+                            World world = worlds.get(i);
+                            world.nextState();
+                            float count = world.getPatternFitness(pattern);
+                            world.cmr.fitness = count;
+                            if(best < count)
+                            {
+                                best = count;
+                                bestIndex = i;
+                            }
                         }
+
+                        if(maxfitness < world.cmr.fitness)
+                        {
+                            maxfitness = world.cmr.fitness;
+                            world = worlds.get(bestIndex);
+                            System.out.println("max fitness change: " + maxfitness);
+                            ObjectSaver.save(world.cmr, "best.cmr");
+                            System.out.println("wj");
+                            repaint();
+                        }
+                        //System.out.println(world.cmr.fitness);
+                        //if(world.cmr.fitness > 1)
+                        //{
+                        //repaint();
+                        //}
+                    }
+                    if(gcmr.getGeneration() % 1000 == 0)
+                    {
+                        System.out.println("Generation: " + gcmr.getGeneration() );
+                        gcmr.save("test");
                     }
 
-                    if(maxfitness < world.cmr.fitness)
-                    {
-                        maxfitness = world.cmr.fitness;
-                        world = worlds.get(bestIndex);
-                        System.out.println("max fitness change: " + maxfitness);
-                        gcmr.save("best");
-                        System.out.println("wj");
-                        repaint();
-                    }
-                    //System.out.println(world.cmr.fitness);
-                    //if(world.cmr.fitness > 1)
-                    //{
-                        //repaint();
-                    //}
+                    gcmr.newGeneration();
+                    worlds.clear();
+                    gcmr.generatedCMR();
                 }
-                if(gcmr.getGeneration() % 1000 == 0)
-                {
-                    gcmr.save("test");
-                }
-                System.out.println("Generation: " + gcmr.getGeneration() );
-                gcmr.newGeneration();
-                worlds.clear();
-                gcmr.generatedCMR();
+                gcmr = null;
+                initGeneticCMR();
             }
+
         }
 
     }

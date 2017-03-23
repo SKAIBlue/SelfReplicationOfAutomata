@@ -10,7 +10,6 @@ import java.util.Random;
 public class ConditionValue implements Serializable{
 
 
-
     private static ICondition EQ = new Equals();
 
 
@@ -58,7 +57,7 @@ public class ConditionValue implements Serializable{
 
 
     public void setValue2(int value2) {
-        this.value2 = value2 % geneticCMR.getConditionMaxValue();
+        this.value2 = Math.abs(value2) % geneticCMR.getConditionMaxValue();
     }
 
 
@@ -140,8 +139,10 @@ public class ConditionValue implements Serializable{
     }
 
 
-
-
+    @Override
+    public String toString() {
+        return String.format("%s %d", condition.toString(), value2);
+    }
 
     /**
      * 이 인스턴스가 가지고 있는 조건을 변경합니다.
@@ -156,7 +157,7 @@ public class ConditionValue implements Serializable{
      */
     public void changeCondition(int bindValue)
     {
-        switch (bindValue % 4)
+        switch (Math.abs(bindValue % 4))
         {
             case 0:
                 condition = EQ;
@@ -186,12 +187,18 @@ public class ConditionValue implements Serializable{
     /**
      * Value 1 and value2 are Not Equals
      */
-    private static class NotEquals implements ICondition
+    private static class NotEquals implements ICondition, Serializable
     {
 
         @Override
         public boolean condition(int value1, int value2) {
             return value1 != value2;
+        }
+
+
+        @Override
+        public String toString() {
+            return String.format("!=");
         }
     }
 
@@ -199,7 +206,7 @@ public class ConditionValue implements Serializable{
     /**
      * value1 and value2 are Equals
      */
-    private static class Equals implements ICondition
+    private static class Equals implements ICondition, Serializable
     {
 
         @Override
@@ -208,6 +215,10 @@ public class ConditionValue implements Serializable{
         }
 
 
+        @Override
+        public String toString() {
+            return String.format("==");
+        }
     }
 
 
@@ -216,12 +227,17 @@ public class ConditionValue implements Serializable{
     /**
      * value1 is lower then value2 or equals
      */
-    private static class LowerOrEqual implements ICondition
+    private static class LowerOrEqual implements ICondition, Serializable
     {
 
         @Override
         public boolean condition(int value1, int value2) {
             return value1 <= value2;
+        }
+
+        @Override
+        public String toString() {
+            return String.format("<=");
         }
     }
 
@@ -233,12 +249,17 @@ public class ConditionValue implements Serializable{
     /**
      * value1 is greater then value2 or equals.
      */
-    private static class GreaterOrEqual implements ICondition
+    private static class GreaterOrEqual implements ICondition, Serializable
     {
 
         @Override
         public boolean condition(int value1, int value2) {
             return value1 >= value2;
+        }
+
+        @Override
+        public String toString() {
+            return String.format(">=");
         }
     }
 
