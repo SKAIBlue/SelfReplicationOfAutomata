@@ -39,14 +39,14 @@ public class World {
      */
     public void put(Point p, int value)
     {
-        if(p.getX() > width - 1)
+        if(p.getX() > width - 2)
         {
-            width = p.getX() + 1;
+            width = p.getX() + 2;
         }
 
-        if(p.getY() > height - 1)
+        if(p.getY() > height - 2)
         {
-            height = p.getY() + 1;
+            height = p.getY() + 2;
         }
 
         worldMap.put(p, value);
