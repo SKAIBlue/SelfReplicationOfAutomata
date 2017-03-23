@@ -117,17 +117,17 @@ public class GeneticCMR implements Serializable
     {
         generation += 1;
 
-        List<CMR> selected = new ArrayList<>();
+        List<CMR> sorted = sortByFitness(cmrs);
 
-
+        CMR best = sorted.get(0);
+        sorted.remove(0);
+        cmrs.clear();
         for(int i = 0 ; i < randomSelect ; i+=1)
         {
-            int randIdx = Math.abs(rand.nextInt() % cmrs.size());
-            selected.add(cmrs.get(randIdx));
-            cmrs.remove(randIdx);
+            int randIdx = Math.abs(rand.nextInt() % sorted.size());
+            cmrs.add(sorted.get(randIdx).clone());
+            sorted.remove(randIdx);
         }
-        cmrs.clear();
-        CMR best = sortByFitness(selected).get(0);
 
         for(int i = 0 ; i < population; i += 1)
         {

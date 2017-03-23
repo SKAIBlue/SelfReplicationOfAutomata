@@ -69,10 +69,7 @@ public class CMR implements Serializable{
             for(int i = conditionList.size() - 1 ; i >= 0; i-=1)
             {
                 CellConditions condition = conditionList.get(i);
-                if(condition.mutate())
-                {
-                    break;
-                }
+                condition.mutate();
             }
         }
 
@@ -256,35 +253,41 @@ public class CMR implements Serializable{
         /**
          * 돌연변이
          */
-        public boolean mutate()
+        public void mutate()
         {
             if(east.mutate())
             {
-                return true;
+                return;
             }
             if(west.mutate())
             {
-                return true;
+                return;
             }
             if(center.mutate())
             {
-                return true;
+                return;
             }
             if(north.mutate())
             {
-                return true;
+                return;
             }
             if(south.mutate())
             {
-                return true;
+                return;
             }
 
             if(rand.nextFloat() < geneticCMR.getTransferValueMutation())
             {
-                transValue = Math.abs(rand.nextInt() % geneticCMR.getConditionMaxValue()) + 1;
-                return true;
+                transValue += Math.abs(rand.nextInt() % 2) == 0 ? 1 : -1;
+                if(transValue < 0)
+                {
+                    transValue = 0;
+                }
+                else if(transValue > geneticCMR.getConditionMaxValue())
+                {
+                    transValue = geneticCMR.getConditionMaxValue();
+                }
             }
-            return false;
         }
 
 

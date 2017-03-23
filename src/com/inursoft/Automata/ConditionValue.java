@@ -91,7 +91,17 @@ public class ConditionValue implements Serializable{
         }
         else if(rand.nextFloat() < geneticCMR.getValueMutation())
         {
-            setValue2(rand.nextInt());
+            int value = value2;
+            value += Math.abs(rand.nextInt() % 2) == 0 ? 1 : -1;
+            if(value < 0)
+            {
+                value = 0;
+            }
+            else if(value > geneticCMR.getConditionMaxValue())
+            {
+                value = geneticCMR.getConditionMaxValue();
+            }
+            setValue2(value);
             return true;
         }
         return false;
