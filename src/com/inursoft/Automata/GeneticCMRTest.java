@@ -16,9 +16,9 @@ class GeneticCMRTest {
         List<CMR> cmr = new ArrayList<>();
         for(int i = 0 ; i < 1000; i +=1)
         {
-            CMR c = new CMR(null);
-            c.fitness = r.nextFloat();
-            cmr.add(c);
+            //CMR c = new CMR(null);
+            //c.fitness = r.nextFloat();
+            //cmr.add(c);
         }
         GeneticCMR geneticCMR = new GeneticCMR(0);
         long time = System.currentTimeMillis();

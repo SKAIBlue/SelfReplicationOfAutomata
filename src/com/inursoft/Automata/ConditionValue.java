@@ -54,6 +54,13 @@ public class ConditionValue implements Serializable{
     }
 
 
+    public ConditionValue(String text)
+    {
+        changeCondition(text.substring(0, 1));
+        String number = text.substring(1);
+        value2 = Integer.valueOf(number);
+    }
+
 
 
     public void setValue2(int value2) {
@@ -181,6 +188,27 @@ public class ConditionValue implements Serializable{
 
     }
 
+
+    public void changeCondition(String con)
+    {
+        if(con.equals("="))
+        {
+            condition = EQ;
+        }
+        else if (con.equals("!"))
+        {
+            condition = NE;
+        }
+        else if (con.equals("<"))
+        {
+            condition = LTE;
+        }
+        else if (con.equals(">"))
+        {
+            condition = GTE;
+        }
+
+    }
 
 
     /**

@@ -44,6 +44,8 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
             case 2:
                 showBest();
                 break;
+            case 3:
+                showSuccess();
         }
 
     }
@@ -75,6 +77,16 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
     private void showBest()
     {
         CMR cmr = (CMR)ObjectSaver.load("best.cmr");
+        runAutomata(cmr);
+    }
+
+    private void showSuccess()
+    {
+        CMR cmr = new CMR("success.txt");
+        runAutomata(cmr);
+    }
+
+    private void runAutomata(CMR cmr) {
         if(cmr != null)
         {
             world = new World(cmr);
@@ -87,10 +99,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
             AutoNextStateThread thread = new AutoNextStateThread();
             thread.start();
         }
-
     }
-
-
 
 
     @Override
@@ -149,8 +158,26 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         this.binder = binder;
     }
 
+/*
+    private int[][] pattern =
+            {
+                    {0, 1, 1, 3, 0},
+                    {3, 2, 2, 2, 1},
+                    {1, 2, 1, 2, 1},
+                    {1, 2, 2, 2, 3},
+                    {0, 3, 1, 1, 0},
+            };
+            */
+/*
+    private int[][] pattern =
+            {
+                    {4, 1, 1, 3},
+                    {1, 0, 0, 1},
+                    {1, 0, 0, 1},
+                    {5, 1, 1, 2},
+            };
 
-
+*/
 
     private int[][] pattern =
             {
@@ -163,6 +190,31 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
                     {0, 0, 0, 0, 0, 0, 0}
             };
 
+/*
+    private int[][] pattern =
+            {
+                    {0, 0, 0, 0, 0, 0},
+                    {0, 4, 1, 1, 3, 0},
+                    {0, 1, 0, 0, 1, 0},
+                    {0, 1, 0, 0, 1, 0},
+                    {0, 5, 1, 1, 2, 0},
+                    {0, 0, 0, 0, 0, 0},
+            };
+*/
+/*
+    private int[][] pattern =
+            {
+                    {0, 0, 0, 0, 0, 0, 0, 0 ,0},
+                    {0, 0, 1, 1, 1, 1, 1, 0 ,0},
+                    {0, 1, 5, 2, 2, 2, 4, 1 ,0},
+                    {0, 1, 2, 1, 1, 1, 2, 1 ,0},
+                    {0, 1, 2, 1, 1, 1, 2, 1 ,0},
+                    {0, 1, 2, 1, 1, 1, 2, 1 ,0},
+                    {0, 1, 6, 2, 2, 2, 3, 1 ,0},
+                    {0, 0, 1, 1, 1, 1, 1, 0 ,0},
+                    {0, 0, 0, 0, 0, 0, 0, 0 ,0},
+            };
+*/
     @Override
     public void onGenerate(CMR generatedCMR) {
         World world = new World(generatedCMR);
@@ -214,6 +266,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                //printWorld(world);
                 world.nextState();
                 System.out.println("Count: " + stateCount);
                 //printWorld(world);

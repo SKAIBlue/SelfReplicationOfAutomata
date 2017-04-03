@@ -6,10 +6,10 @@ package com.inursoft.Data;
 public class Consts {
 
 
-    public static final int WINDOWS_WIDTH = 480;
+    public static final int WINDOWS_WIDTH = 800;
 
 
-    public static final int WINDOWS_HEIGHT = 480;
+    public static final int WINDOWS_HEIGHT = 800;
 
 
     public static final int WINDOWS_BAR_HEIGHT = 22;

@@ -1,6 +1,6 @@
 package com.inursoft.Automata;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -57,6 +57,26 @@ public class CMR implements Serializable{
     }
 
 
+    public CMR(String path)
+    {
+        try {
+            FileReader fr = new FileReader(path);
+            BufferedReader reader = new BufferedReader(fr);
+            String line;
+            while((line = reader.readLine()) != null)
+            {
+                addNewCondition(line);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 
     public void mutate()
     {
@@ -84,8 +104,11 @@ public class CMR implements Serializable{
         for(int i = 0 ; i < conditionList.size(); i+=1)
         {
             CellConditions condition = conditionList.get(i);
+
             if(isMatchCondition(condition, east, west, center, north, south))
             {
+                //System.out.println(String.format("E: %d W: %d C: %d N: %d S: %d", east, west,center,north,south));
+                //System.out.println(i+": " + condition.toString());
                 return condition.transValue;
             }
         }
@@ -103,6 +126,14 @@ public class CMR implements Serializable{
         conditionList.add(condition);
     }
 
+
+    public void addNewCondition(String line)
+    {
+        CellConditions condition = new CellConditions(line);
+        System.out.println(condition);
+        conditions.add(condition);
+        conditionList.add(condition);
+    }
 
 
 
@@ -189,6 +220,19 @@ public class CMR implements Serializable{
         }
 
 
+        public CellConditions(String line)
+        {
+            String[] splits = line.split(" ");
+            east = new ConditionValue(splits[0]);
+            west = new ConditionValue(splits[1]);
+            center = new ConditionValue(splits[2]);
+            north = new ConditionValue(splits[3]);
+            south = new ConditionValue(splits[4]);
+            transValue = Integer.valueOf(splits[5]);
+        }
+
+
+
         private CellConditions(CellConditions cellConditions)
         {
             this.geneticCMR = cellConditions.geneticCMR;
@@ -237,11 +281,11 @@ public class CMR implements Serializable{
 
         @Override
         public String toString() {
-            return "east=" + east +
-                    ", west=" + west +
-                    ", center=" + center +
-                    ", north=" + north +
-                    ", south=" + south;
+            return "E" + east +
+                    ", W" + west +
+                    ", C" + center +
+                    ", N" + north +
+                    ", S" + south;
         }
 
         @Override

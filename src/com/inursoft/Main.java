@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scan = new Scanner(System.in);
-        System.out.print("1. 찾기\n2. 베스트 변화 보기\n> ");
+        System.out.print("1. 찾기\n2. 베스트 변화 보기\n3. 복제 성공사례 보기> ");
         int input = scan.nextInt();
         WorldPanel world = new WorldPanel(input);
 

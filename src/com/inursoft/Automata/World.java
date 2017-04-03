@@ -89,6 +89,8 @@ public class World {
      */
     public void clear()
     {
+        width = 0;
+        height = 0;
         worldMap.clear();
     }
 
@@ -256,12 +258,12 @@ public class World {
                 );
             }
         }
-        worldMap = toMap(res);
+        put(res);
     }
 
 
 
-    private int getEastValue(int[][] world, int x, int y)
+    private int getWestValue(int[][] world, int x, int y)
     {
         if(x == 0)
         {
@@ -272,7 +274,7 @@ public class World {
 
 
 
-    private int getWestValue(int[][] world, int x, int y)
+    private int getEastValue(int[][] world, int x, int y)
     {
         if(world[y].length - 1 == x)
         {
