@@ -182,11 +182,11 @@ public class GeneticCMR implements Serializable
         for(int i = 0 ; i < original.size(); i+=1)
         {
             CMR n = original.get(i);
-            if(n.fitness > pivot.fitness)
+            if(n.fitness.gt(pivot.fitness))
             {
                 right.add(n);
             }
-            else if(n.fitness < pivot.fitness)
+            else if(pivot.fitness.gt(n.fitness))
             {
                 left.add(n);
             }

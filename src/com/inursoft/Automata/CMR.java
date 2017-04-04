@@ -14,7 +14,7 @@ public class CMR implements Serializable{
 
 
 
-    public float fitness = 0;
+    public Fitness fitness = new Fitness();
 
 
 

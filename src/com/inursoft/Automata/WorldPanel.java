@@ -252,7 +252,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         System.out.println(build.toString());
     }
 
-    float maxfitness = 0;
+    Fitness maxfitness = new Fitness();
 
     private class AutoNextStateThread extends Thread
     {
@@ -262,7 +262,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
             while(true)
             {
                 try {
-                    sleep(1000);
+                    sleep(300);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -284,32 +284,31 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         public void run() {
             while(true)
             {
-                while(gcmr.getGeneration() < 2000000)
+                while(gcmr.getGeneration() < 3000000)
                 {
-                    for(int iterate = 0 ; iterate < 100; iterate +=1)
+                    for(int iterate = 0 ; iterate < 30; iterate +=1)
                     {
-                        float best = 0;
+                        Fitness best = new Fitness();
                         int bestIndex = 0;
                         for(int i = 0 ; i < worlds.size() ; i+=1)
                         {
                             World world = worlds.get(i);
                             world.nextState();
-                            float count = world.getPatternFitness(pattern);
-                            world.cmr.fitness = count;
-                            if(best < count)
+                            Fitness fitness = world.getPatternFitness(pattern);
+                            world.cmr.fitness = fitness;
+                            if(fitness.gt(best))
                             {
-                                best = count;
+                                best = fitness;
                                 bestIndex = i;
                             }
                         }
 
-                        if(maxfitness < world.cmr.fitness)
+                        if(world.cmr.fitness.gt(maxfitness))
                         {
                             maxfitness = world.cmr.fitness;
                             world = worlds.get(bestIndex);
                             System.out.println("max fitness change: " + maxfitness);
                             ObjectSaver.save(world.cmr, "best.cmr");
-                            System.out.println("wj");
                             repaint();
                         }
                         //System.out.println(world.cmr.fitness);

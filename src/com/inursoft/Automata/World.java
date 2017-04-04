@@ -75,7 +75,7 @@ public class World {
         for(int i = 0 ; i < array.length ; i+=1)
         {
             int[] inner = array[i];
-            for(int j = 0; j < inner.length; j+=1)
+            for(int j = 0; j < inner.length ; j+=1)
             {
                 int value = inner[j];
                 put(j, i, value);
@@ -135,14 +135,13 @@ public class World {
      * @param pattern 패턴
      * @return 찾은 패턴의 수
      */
-    public float getPatternFitness(int[][] pattern)
+    public Fitness getPatternFitness(int[][] pattern)
     {
         int[][] world = toIntArray();
-        float count = 0;
         int patternWidth = pattern[0].length;
         int patternHeight = pattern.length;
         int patternAreaSize = patternWidth * patternHeight;
-        boolean oneTime = false;
+        Fitness fitness = new Fitness();
         for(int i = 0 ; i <= height ; i+=patternHeight)
         {
             for(int j = 0; j <= width ; j+=patternWidth)
@@ -163,16 +162,15 @@ public class World {
                 }
                 if(incount == patternAreaSize)
                 {
-                    count += 1;
+                    fitness.match += 1;
                 }
-                else if(!oneTime)
+                else
                 {
-                    oneTime = true;
-                    count += ((float)incount / patternAreaSize);
+                    fitness.part += incount;
                 }
             }
         }
-        return count;
+        return fitness;
     }
 
 
@@ -258,6 +256,7 @@ public class World {
                 );
             }
         }
+        clear();
         put(res);
     }
 
