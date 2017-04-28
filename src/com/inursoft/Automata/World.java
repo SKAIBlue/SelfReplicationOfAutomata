@@ -39,6 +39,10 @@ public class World {
      */
     public void put(Point p, int value)
     {
+        if(value == 0)
+        {
+            return;
+        }
         if(p.getX() > width - 2)
         {
             width = p.getX() + 2;
@@ -79,6 +83,20 @@ public class World {
             {
                 int value = inner[j];
                 put(j, i, value);
+            }
+        }
+    }
+
+
+    public void putPattern(int[][] array)
+    {
+        for(int i = 0 ; i < array.length ; i+=1)
+        {
+            int[] inner = array[i];
+            for(int j = 0; j < inner.length ; j+=1)
+            {
+                int value = inner[j];
+                put(j + 1, i + 1, value);
             }
         }
     }
@@ -191,6 +209,12 @@ public class World {
      */
     public int getHeight() {
         return height;
+    }
+
+
+    public int getMax()
+    {
+        return width > height ? width : height;
     }
 
 

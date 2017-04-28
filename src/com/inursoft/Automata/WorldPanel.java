@@ -96,7 +96,8 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         if(cmr != null)
         {
             world = new World(cmr);
-            world.put(pattern);
+            world.putPattern(pattern);
+
             setColorBinder(value -> {
                 int color = 220 - (int)(220f * value / 10f);
                 return new Color(color, color, color);
@@ -122,11 +123,11 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
             //printWorld(world);
 
             Graphics2D g2d = (Graphics2D)g;
-            if(world.getWidth() == 0)
+            if(world.getMax() == 0)
             {
                 return;
             }
-            int boxSize = Consts.WINDOWS_WIDTH / world.getWidth();
+            int boxSize = Consts.WINDOWS_WIDTH / world.getMax();
             int heightCount = Consts.WINDOWS_HEIGHT / boxSize + 1;
             for(int i = 0 ; i <= heightCount; i+=1)
             {
@@ -168,7 +169,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         this.binder = binder;
     }
 
-/*
+
     private int[][] pattern =
             {
                     {0, 1, 1, 3, 0},
@@ -177,7 +178,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
                     {1, 2, 2, 2, 3},
                     {0, 3, 1, 1, 0},
             };
-            */
+
 /*
     private int[][] pattern =
             {
@@ -189,46 +190,23 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
 */
 
-    private int[][] pattern =
-            {
-                    {0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 1, 1, 3, 0, 0},
-                    {0, 3, 2, 2, 2, 1, 0},
-                    {0, 1, 2, 1, 2, 1, 0},
-                    {0, 1, 2, 2, 2, 3, 0},
-                    {0, 0, 3, 1, 1, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0}
-            };
-
 /*
     private int[][] pattern =
             {
-                    {0, 0, 0, 0, 0, 0},
-                    {0, 4, 1, 1, 3, 0},
-                    {0, 1, 0, 0, 1, 0},
-                    {0, 1, 0, 0, 1, 0},
-                    {0, 5, 1, 1, 2, 0},
-                    {0, 0, 0, 0, 0, 0},
-            };
-*/
-/*
-    private int[][] pattern =
-            {
-                    {0, 0, 0, 0, 0, 0, 0, 0 ,0},
-                    {0, 0, 1, 1, 1, 1, 1, 0 ,0},
-                    {0, 1, 5, 2, 2, 2, 4, 1 ,0},
-                    {0, 1, 2, 1, 1, 1, 2, 1 ,0},
-                    {0, 1, 2, 1, 1, 1, 2, 1 ,0},
-                    {0, 1, 2, 1, 1, 1, 2, 1 ,0},
-                    {0, 1, 6, 2, 2, 2, 3, 1 ,0},
-                    {0, 0, 1, 1, 1, 1, 1, 0 ,0},
-                    {0, 0, 0, 0, 0, 0, 0, 0 ,0},
+                    {0, 1, 1, 1, 1, 1, 0},
+                    {1, 5, 2, 2, 2, 4, 1},
+                    {1, 2, 1, 1, 1, 2, 1},
+                    {1, 2, 1, 1, 1, 2, 1},
+                    {1, 2, 1, 1, 1, 2, 1},
+                    {1, 6, 2, 2, 2, 3, 1},
+                    {0, 1, 1, 1, 1, 1, 0},
             };
 */
     @Override
     public void onGenerate(CMR generatedCMR) {
         World world = new World(generatedCMR);
-        world.put(pattern);
+        world.putPattern(pattern);
+        //printWorld(world);
         worlds.add(world);
         this.world = world;
     }
