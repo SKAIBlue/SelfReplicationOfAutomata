@@ -63,16 +63,20 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         generateThread.start();
     }
 
+
+
     private void initGeneticCMR()
     {
         if(gcmr == null)
         {
-            gcmr = new GeneticCMR(8, 4, 10);
+            gcmr = new GeneticCMR(Consts.CMR_SIZE, 8, 4, 10);
         }
         gcmr.setOnGenerateListener(this);
         gcmr.generatedCMR();
 
     }
+
+
 
     private void showBest()
     {

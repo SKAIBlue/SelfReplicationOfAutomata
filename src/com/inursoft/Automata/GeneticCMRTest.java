@@ -1,5 +1,7 @@
 package com.inursoft.Automata;
 
+import com.inursoft.Data.Consts;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,7 +22,7 @@ class GeneticCMRTest {
             //c.fitness = r.nextFloat();
             //cmr.add(c);
         }
-        GeneticCMR geneticCMR = new GeneticCMR(0);
+        GeneticCMR geneticCMR = new GeneticCMR(Consts.CMR_SIZE, 0);
         long time = System.currentTimeMillis();
 
         List<CMR> sorted = geneticCMR.sortByFitness(cmr);

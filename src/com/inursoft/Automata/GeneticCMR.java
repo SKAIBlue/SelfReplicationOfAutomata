@@ -61,12 +61,18 @@ public class GeneticCMR implements Serializable
     private List<CMR> cmrs = new ArrayList<>();
 
 
+
+    private int cmrSize = 0;
+
+
+
     private Random rand = new Random();
 
 
 
-    public GeneticCMR(int conditionMaxValue)
+    public GeneticCMR(int cmrSize, int conditionMaxValue)
     {
+        this.cmrSize = cmrSize;
         this.conditionMaxValue = conditionMaxValue;
         initialize();
     }
@@ -74,7 +80,8 @@ public class GeneticCMR implements Serializable
 
 
 
-    public GeneticCMR(int population, int staleSpecies, int conditionMaxValue) {
+    public GeneticCMR(int cmrSize, int population, int staleSpecies, int conditionMaxValue) {
+        this.cmrSize = cmrSize;
         this.population = population;
         this.randomSelect = staleSpecies;
         this.conditionMaxValue = conditionMaxValue;
@@ -84,7 +91,8 @@ public class GeneticCMR implements Serializable
 
 
 
-    public GeneticCMR(int population, int staleSpecies, int conditionMaxValue, float newMutation, float conditionMutation, float transferValueMutation, float valueMutation, List<CMR> cmrs) {
+    public GeneticCMR(int cmrSize, int population, int staleSpecies, int conditionMaxValue, float newMutation, float conditionMutation, float transferValueMutation, float valueMutation, List<CMR> cmrs) {
+        this.cmrSize = cmrSize;
         this.population = population;
         this.randomSelect = staleSpecies;
         this.conditionMaxValue = conditionMaxValue;
@@ -258,6 +266,9 @@ public class GeneticCMR implements Serializable
         return valueMutation;
     }
 
+    public int getCmrSize() {
+        return cmrSize;
+    }
 
     public int getGeneration() {
         return generation;

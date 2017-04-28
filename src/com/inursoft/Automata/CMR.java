@@ -2,7 +2,6 @@ package com.inursoft.Automata;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -10,63 +9,59 @@ import java.util.Random;
  * Created by Anonymous on 2017. 3. 10..
  * Condition Matching Rule
  */
-public class CMR implements Serializable{
-
+public class CMR implements Serializable {
 
 
     public Fitness fitness = new Fitness();
 
 
-
     private Random rand = new Random();
 
 
-
-    private HashSet<CellConditions> conditions = new HashSet<>();
-
-
-    private List<CellConditions> conditionList = new ArrayList<>();
-
+    private CellConditions[] conditions;
 
 
     private GeneticCMR geneticCMR;
 
 
-
-
     public CMR(GeneticCMR geneticCMR) {
-        if(geneticCMR != null)
-        {
-            conditions.add(new CellConditions(geneticCMR));
+        if (geneticCMR != null) {
+            conditions = new CellConditions[geneticCMR.getCmrSize()];
+
+            for(int i = 0 ; i < geneticCMR.getCmrSize() ; i+=1)
+            {
+                conditions[i] = new CellConditions(geneticCMR);
+            }
+
             this.geneticCMR = geneticCMR;
         }
     }
 
 
-
-
-    private CMR(CMR original)
-    {
+    private CMR(CMR original) {
         this.geneticCMR = original.geneticCMR;
-        for(int i = 0 ; i < original.conditionList.size(); i+=1)
-        {
-            CellConditions conditions = original.conditionList.get(i);
+        conditions = new CellConditions[geneticCMR.getCmrSize()];
+        for (int i = 0; i < original.conditions.length; i += 1) {
+            CellConditions conditions = original.conditions[i];
             CellConditions newCondition = conditions.clone();
-            this.conditions.add(newCondition);
+            this.conditions[i] = newCondition;
         }
     }
 
 
-    public CMR(String path)
-    {
+    public CMR(String path) {
         try {
             FileReader fr = new FileReader(path);
             BufferedReader reader = new BufferedReader(fr);
+
             String line;
-            while((line = reader.readLine()) != null)
-            {
-                addNewCondition(line);
+            List<CellConditions> conditionsList = new ArrayList<>();
+            while ((line = reader.readLine()) != null) {
+                conditionsList.add(new CellConditions(line));
             }
+
+            toArray(conditionsList);
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -77,36 +72,20 @@ public class CMR implements Serializable{
 
 
 
+    public void mutate() {
 
-    public void mutate()
-    {
-        if(rand.nextFloat() < geneticCMR.getNewMutation())
-        {
-            addNewCondition();
+        for (int i = conditions.length - 1; i >= 0; i -= 1) {
+            CellConditions condition = conditions[i];
+            condition.mutate();
         }
-        else
-        {
-            for(int i = conditionList.size() - 1 ; i >= 0; i-=1)
-            {
-                CellConditions condition = conditionList.get(i);
-                condition.mutate();
-            }
-        }
-
     }
 
 
+    public int conditionMatch(int east, int west, int center, int north, int south) {
+        for (int i = 0; i < conditions.length; i += 1) {
+            CellConditions condition = conditions[i];
 
-
-
-    public int conditionMatch(int east, int west, int center, int north, int south)
-    {
-        for(int i = 0 ; i < conditionList.size(); i+=1)
-        {
-            CellConditions condition = conditionList.get(i);
-
-            if(isMatchCondition(condition, east, west, center, north, south))
-            {
+            if (isMatchCondition(condition, east, west, center, north, south)) {
                 //System.out.println(String.format("E: %d W: %d C: %d N: %d S: %d", east, west,center,north,south));
                 //System.out.println(i+": " + condition.toString());
                 return condition.transValue;
@@ -116,29 +95,17 @@ public class CMR implements Serializable{
     }
 
 
-
-
-
-    public void addNewCondition()
-    {
-        CellConditions condition = new CellConditions(geneticCMR);
-        conditions.add(condition);
-        conditionList.add(condition);
-    }
-
-
-    public void addNewCondition(String line)
-    {
-        CellConditions condition = new CellConditions(line);
-        System.out.println(condition);
-        conditions.add(condition);
-        conditionList.add(condition);
+    private void toArray(List<CellConditions> conditionsList) {
+        conditions = new CellConditions[conditionsList.size()];
+        for(int i = 0 ; i < conditionsList.size(); i+=1)
+        {
+            conditions[i] = conditionsList.get(i);
+        }
     }
 
 
 
-    private boolean isMatchCondition(CellConditions conditions, int east, int west, int center, int north, int south)
-    {
+    private boolean isMatchCondition(CellConditions conditions, int east, int west, int center, int north, int south) {
         return conditions.east.matching(east) &&
                 conditions.west.matching(west) &&
                 conditions.center.matching(center) &&
@@ -147,23 +114,15 @@ public class CMR implements Serializable{
     }
 
 
-
-    public List<CellConditions> getConditionList() {
-        return conditionList;
-    }
-
-
-
     @Override
-    protected CMR clone(){
+    protected CMR clone() {
         return new CMR(this);
     }
 
     /**
      * 값이 전이되는 조건입니다.
      */
-    public class CellConditions implements Serializable
-    {
+    public class CellConditions implements Serializable {
 
         private GeneticCMR geneticCMR;
 
@@ -173,12 +132,10 @@ public class CMR implements Serializable{
         private ConditionValue east;
 
 
-
         /**
          * 서쪽 셀의 조건
          */
         private ConditionValue west;
-
 
 
         /**
@@ -187,12 +144,10 @@ public class CMR implements Serializable{
         private ConditionValue center;
 
 
-
         /**
          * 북쪽 셀의 조건
          */
         private ConditionValue north;
-
 
 
         /**
@@ -201,15 +156,13 @@ public class CMR implements Serializable{
         private ConditionValue south;
 
 
-
         /**
          * 전이될 값
          */
         private int transValue;
 
 
-        public CellConditions(GeneticCMR geneticCMR)
-        {
+        public CellConditions(GeneticCMR geneticCMR) {
             this.geneticCMR = geneticCMR;
             east = new ConditionValue(geneticCMR);
             west = new ConditionValue(geneticCMR);
@@ -220,8 +173,7 @@ public class CMR implements Serializable{
         }
 
 
-        public CellConditions(String line)
-        {
+        public CellConditions(String line) {
             String[] splits = line.split(" ");
             east = new ConditionValue(splits[0], splits[1]);
             west = new ConditionValue(splits[2], splits[3]);
@@ -232,9 +184,7 @@ public class CMR implements Serializable{
         }
 
 
-
-        private CellConditions(CellConditions cellConditions)
-        {
+        private CellConditions(CellConditions cellConditions) {
             this.geneticCMR = cellConditions.geneticCMR;
             east = cellConditions.east.clone();
             west = cellConditions.west.clone();
@@ -243,8 +193,6 @@ public class CMR implements Serializable{
             south = cellConditions.south.clone();
             transValue = cellConditions.transValue;
         }
-
-
 
 
         @Override
@@ -265,6 +213,7 @@ public class CMR implements Serializable{
 
         /**
          * 중복되는 조건을 찾기 위해 해시 생성
+         *
          * @return
          */
         @Override
@@ -285,7 +234,7 @@ public class CMR implements Serializable{
         }
 
         @Override
-        protected CellConditions clone(){
+        protected CellConditions clone() {
             return new CellConditions(this);
         }
 
@@ -293,43 +242,32 @@ public class CMR implements Serializable{
         /**
          * 돌연변이
          */
-        public void mutate()
-        {
-            if(east.mutate())
-            {
+        public void mutate() {
+            if (east.mutate()) {
                 return;
             }
-            if(west.mutate())
-            {
+            if (west.mutate()) {
                 return;
             }
-            if(center.mutate())
-            {
+            if (center.mutate()) {
                 return;
             }
-            if(north.mutate())
-            {
+            if (north.mutate()) {
                 return;
             }
-            if(south.mutate())
-            {
+            if (south.mutate()) {
                 return;
             }
 
-            if(rand.nextFloat() < geneticCMR.getTransferValueMutation())
-            {
+            if (rand.nextFloat() < geneticCMR.getTransferValueMutation()) {
                 transValue += Math.abs(rand.nextInt() % 2) == 0 ? 1 : -1;
-                if(transValue < 0)
-                {
+                if (transValue < 0) {
                     transValue = 0;
-                }
-                else if(transValue > geneticCMR.getConditionMaxValue())
-                {
+                } else if (transValue > geneticCMR.getConditionMaxValue()) {
                     transValue = geneticCMR.getConditionMaxValue();
                 }
             }
         }
-
 
 
         public ConditionValue getEast() {
