@@ -223,12 +223,12 @@ public class CMR implements Serializable{
         public CellConditions(String line)
         {
             String[] splits = line.split(" ");
-            east = new ConditionValue(splits[0]);
-            west = new ConditionValue(splits[1]);
-            center = new ConditionValue(splits[2]);
-            north = new ConditionValue(splits[3]);
-            south = new ConditionValue(splits[4]);
-            transValue = Integer.valueOf(splits[5]);
+            east = new ConditionValue(splits[0], splits[1]);
+            west = new ConditionValue(splits[2], splits[3]);
+            center = new ConditionValue(splits[4], splits[5]);
+            north = new ConditionValue(splits[6], splits[7]);
+            south = new ConditionValue(splits[8], splits[9]);
+            transValue = Integer.valueOf(splits[10]);
         }
 
 
@@ -281,11 +281,7 @@ public class CMR implements Serializable{
 
         @Override
         public String toString() {
-            return "E" + east +
-                    ", W" + west +
-                    ", C" + center +
-                    ", N" + north +
-                    ", S" + south;
+            return String.format("%s %s %s %s %s %d", east, west, center, north, south, transValue);
         }
 
         @Override

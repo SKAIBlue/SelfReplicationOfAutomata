@@ -262,7 +262,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
             while(true)
             {
                 try {
-                    sleep(300);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

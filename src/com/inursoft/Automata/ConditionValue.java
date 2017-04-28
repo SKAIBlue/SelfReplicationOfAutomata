@@ -54,6 +54,14 @@ public class ConditionValue implements Serializable{
     }
 
 
+    public ConditionValue(String condition, String value2)
+    {
+        changeCondition(condition);
+        this.value2 = Integer.valueOf(value2);
+    }
+
+
+
     public ConditionValue(String text)
     {
         changeCondition(text.substring(0, 1));
@@ -161,6 +169,8 @@ public class ConditionValue implements Serializable{
         return String.format("%s %d", condition.toString(), value2);
     }
 
+
+
     /**
      * 이 인스턴스가 가지고 있는 조건을 변경합니다.
      * 0 ~ 5 사이의 정수를 입력해야 하며
@@ -178,12 +188,16 @@ public class ConditionValue implements Serializable{
         {
             case 0:
                 condition = EQ;
+                break;
             case 1:
                 condition = NE;
+                break;
             case 2:
                 condition = LTE;
+                break;
             case 3:
                 condition = GTE;
+                break;
         }
 
     }
@@ -191,23 +205,7 @@ public class ConditionValue implements Serializable{
 
     public void changeCondition(String con)
     {
-        if(con.equals("="))
-        {
-            condition = EQ;
-        }
-        else if (con.equals("!"))
-        {
-            condition = NE;
-        }
-        else if (con.equals("<"))
-        {
-            condition = LTE;
-        }
-        else if (con.equals(">"))
-        {
-            condition = GTE;
-        }
-
+        changeCondition(Integer.valueOf(con));
     }
 
 
@@ -219,6 +217,26 @@ public class ConditionValue implements Serializable{
 
         boolean condition(int value1, int value2);
 
+    }
+
+
+
+    /**
+     * value1 and value2 are Equals
+     */
+    private static class Equals implements ICondition, Serializable
+    {
+
+        @Override
+        public boolean condition(int value1, int value2) {
+            return value1 == value2;
+        }
+
+
+        @Override
+        public String toString() {
+            return Integer.toString(0);
+        }
     }
 
 
@@ -236,29 +254,9 @@ public class ConditionValue implements Serializable{
 
         @Override
         public String toString() {
-            return String.format("!=");
+            return Integer.toString(1);
         }
     }
-
-
-    /**
-     * value1 and value2 are Equals
-     */
-    private static class Equals implements ICondition, Serializable
-    {
-
-        @Override
-        public boolean condition(int value1, int value2) {
-            return value1 == value2;
-        }
-
-
-        @Override
-        public String toString() {
-            return String.format("==");
-        }
-    }
-
 
 
 
@@ -275,7 +273,7 @@ public class ConditionValue implements Serializable{
 
         @Override
         public String toString() {
-            return String.format("<=");
+            return Integer.toString(2);
         }
     }
 
@@ -297,8 +295,10 @@ public class ConditionValue implements Serializable{
 
         @Override
         public String toString() {
-            return String.format(">=");
+            return Integer.toString(3);
         }
+
+
     }
 
 
