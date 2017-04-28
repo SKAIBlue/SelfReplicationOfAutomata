@@ -97,32 +97,6 @@ public class ConditionValue implements Serializable{
 
 
 
-    public boolean mutate()
-    {
-        if(rand.nextFloat() < geneticCMR.getConditionMutation())
-        {
-            changeCondition(rand.nextInt());
-            return true;
-        }
-        else if(rand.nextFloat() < geneticCMR.getValueMutation())
-        {
-            int value = value2;
-            value += Math.abs(rand.nextInt() % 2) == 0 ? 1 : -1;
-            if(value < 0)
-            {
-                value = 0;
-            }
-            else if(value > geneticCMR.getConditionMaxValue())
-            {
-                value = geneticCMR.getConditionMaxValue();
-            }
-            setValue2(value);
-            return true;
-        }
-        return false;
-    }
-
-
     /**
      * 이 조건을 복제합니다.
      * @return 복제된 조건
@@ -208,6 +182,19 @@ public class ConditionValue implements Serializable{
         changeCondition(Integer.valueOf(con));
     }
 
+    public void mutate(int conditionOrValue)
+    {
+        int randValue = Math.abs(rand.nextInt()) % geneticCMR.getConditionMaxValue();
+        switch (conditionOrValue)
+        {
+            case 0 :
+                changeCondition(randValue);
+                break;
+            case 1:
+                value2 = randValue;
+                break;
+        }
+    }
 
     /**
      * interface for condition

@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static com.inursoft.Data.Consts.CMR_SIZE;
+
 
 /**
  * Created by Anonymous on 2017. 3. 6..
@@ -69,7 +71,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
     {
         if(gcmr == null)
         {
-            gcmr = new GeneticCMR(Consts.CMR_SIZE, 8, 4, 10);
+            gcmr = new GeneticCMR(CMR_SIZE, 8, 4, 8);
         }
         gcmr.setOnGenerateListener(this);
         gcmr.generatedCMR();
@@ -120,6 +122,10 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
             //printWorld(world);
 
             Graphics2D g2d = (Graphics2D)g;
+            if(world.getWidth() == 0)
+            {
+                return;
+            }
             int boxSize = Consts.WINDOWS_WIDTH / world.getWidth();
             int heightCount = Consts.WINDOWS_HEIGHT / boxSize + 1;
             for(int i = 0 ; i <= heightCount; i+=1)

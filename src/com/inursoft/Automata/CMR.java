@@ -2,6 +2,7 @@ package com.inursoft.Automata;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -73,11 +74,26 @@ public class CMR implements Serializable {
 
 
     public void mutate() {
-
-        for (int i = conditions.length - 1; i >= 0; i -= 1) {
-            CellConditions condition = conditions[i];
-            condition.mutate();
+        int mutateValue = Math.abs(rand.nextInt()) % 3;
+        HashSet<Integer> integerSet = new HashSet<>();
+        while( integerSet.size()< mutateValue )
+        {
+            int newValue = Math.abs(rand.nextInt() % (geneticCMR.getCmrSize() * 11));
+            if(!integerSet.contains(newValue))
+            {
+                integerSet.add(newValue);
+            }
         }
+
+        for(Integer integer : integerSet)
+        {
+            int index = integer / 11;
+            int inIndex = integer % 11;
+            System.out.println(integer);
+            conditions[index].mutate(inIndex);
+        }
+        System.out.println(toString());
+
     }
 
 
@@ -117,6 +133,17 @@ public class CMR implements Serializable {
     @Override
     protected CMR clone() {
         return new CMR(this);
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for(CellConditions condition : conditions)
+        {
+            builder.append(String.format("%s\n", condition.toString()));
+        }
+        return builder.toString();
     }
 
     /**
@@ -239,37 +266,6 @@ public class CMR implements Serializable {
         }
 
 
-        /**
-         * 돌연변이
-         */
-        public void mutate() {
-            if (east.mutate()) {
-                return;
-            }
-            if (west.mutate()) {
-                return;
-            }
-            if (center.mutate()) {
-                return;
-            }
-            if (north.mutate()) {
-                return;
-            }
-            if (south.mutate()) {
-                return;
-            }
-
-            if (rand.nextFloat() < geneticCMR.getTransferValueMutation()) {
-                transValue += Math.abs(rand.nextInt() % 2) == 0 ? 1 : -1;
-                if (transValue < 0) {
-                    transValue = 0;
-                } else if (transValue > geneticCMR.getConditionMaxValue()) {
-                    transValue = geneticCMR.getConditionMaxValue();
-                }
-            }
-        }
-
-
         public ConditionValue getEast() {
             return east;
         }
@@ -297,6 +293,34 @@ public class CMR implements Serializable {
 
         public int getTransValue() {
             return transValue;
+        }
+
+        public void mutate(int index)
+        {
+            int direction = index / 2;
+            int conditionOrValue = index % 2;
+            switch (direction)
+            {
+                case 0:
+                    east.mutate(conditionOrValue);
+                    break;
+                case 1:
+                    west.mutate(conditionOrValue);
+                    break;
+                case 2:
+                    center.mutate(conditionOrValue);
+                    break;
+                case 3:
+                    north.mutate(conditionOrValue);
+                    break;
+                case 4:
+                    south.mutate(conditionOrValue);
+                    break;
+                case 5:
+                    transValue = Math.abs(rand.nextInt()) % geneticCMR.getConditionMaxValue();
+                    break;
+
+            }
         }
 
     }

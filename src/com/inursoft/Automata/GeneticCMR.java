@@ -28,33 +28,6 @@ public class GeneticCMR implements Serializable
      */
     private int conditionMaxValue = 10;
 
-
-    /**
-     * 새로운 조건이 생길 돌연변이 확률
-     */
-    private float newMutation = 0.5f;
-
-
-    /**
-     * 조건이 변경될 돌연변이 확률
-     */
-    private float conditionMutation = 0.5f;
-
-
-
-    /**
-     * 전이값이 변경될 돌연변이 확률
-     */
-    private float transferValueMutation = 0.5f;
-
-
-
-    /**
-     * 조건 값이 변경될 돌연변이 확률
-     */
-    private float valueMutation = 0.5f;
-
-
     private transient OnGenerateListener generateListener;
 
 
@@ -89,20 +62,6 @@ public class GeneticCMR implements Serializable
     }
 
 
-
-
-    public GeneticCMR(int cmrSize, int population, int staleSpecies, int conditionMaxValue, float newMutation, float conditionMutation, float transferValueMutation, float valueMutation, List<CMR> cmrs) {
-        this.cmrSize = cmrSize;
-        this.population = population;
-        this.randomSelect = staleSpecies;
-        this.conditionMaxValue = conditionMaxValue;
-        this.newMutation = newMutation;
-        this.conditionMutation = conditionMutation;
-        this.transferValueMutation = transferValueMutation;
-        this.valueMutation = valueMutation;
-        this.cmrs = cmrs;
-        initialize();
-    }
 
 
 
@@ -250,21 +209,6 @@ public class GeneticCMR implements Serializable
         return conditionMaxValue;
     }
 
-    public float getNewMutation() {
-        return newMutation;
-    }
-
-    public float getConditionMutation() {
-        return conditionMutation;
-    }
-
-    public float getTransferValueMutation() {
-        return transferValueMutation;
-    }
-
-    public float getValueMutation() {
-        return valueMutation;
-    }
 
     public int getCmrSize() {
         return cmrSize;
