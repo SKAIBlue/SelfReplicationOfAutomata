@@ -5,7 +5,7 @@ package com.inursoft.Data;
  */
 public class Consts {
 
-    public static final int CMR_SIZE = 30;
+    public static final int CMR_SIZE = 40;
 
 
     public static final int WINDOWS_WIDTH = 800;

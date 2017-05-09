@@ -53,10 +53,10 @@ public class GeneticCMR implements Serializable
 
 
 
-    public GeneticCMR(int cmrSize, int population, int staleSpecies, int conditionMaxValue) {
+    public GeneticCMR(int cmrSize, int population, int randomSelect, int conditionMaxValue) {
         this.cmrSize = cmrSize;
         this.population = population;
-        this.randomSelect = staleSpecies;
+        this.randomSelect = randomSelect;
         this.conditionMaxValue = conditionMaxValue;
         initialize();
     }
@@ -83,20 +83,19 @@ public class GeneticCMR implements Serializable
     public void newGeneration()
     {
         generation += 1;
+        List<CMR> selected = new ArrayList();
+        for(int i = 0 ; i < randomSelect ; i +=1)
+        {
+            int selectIndex = Math.abs(rand.nextInt()) % cmrs.size();
+            selected.add(cmrs.get(selectIndex));
+            cmrs.remove(selectIndex);
+        }
 
-        List<CMR> sorted = sortByFitness(cmrs);
+        List<CMR> sorted = sortByFitness(selected);
 
         CMR best = sorted.get(0);
         sorted.remove(0);
         cmrs.clear();
-        for(int i = 0 ; i < randomSelect ; i+=1)
-        {
-            int randIdx = Math.abs(rand.nextInt() % sorted.size());
-            CMR newCMR = sorted.get(randIdx).clone();
-            newCMR.mutate();
-            cmrs.add(newCMR);
-            sorted.remove(randIdx);
-        }
 
         for(int i = 0 ; i < population; i += 1)
         {
@@ -149,11 +148,11 @@ public class GeneticCMR implements Serializable
         for(int i = 0 ; i < original.size(); i+=1)
         {
             CMR n = original.get(i);
-            if(n.fitness.gt(pivot.fitness))
+            if(n.getBestFitness() > pivot.getBestFitness())
             {
                 right.add(n);
             }
-            else if(pivot.fitness.gt(n.fitness))
+            else if(pivot.getBestFitness() > n.getBestFitness())
             {
                 left.add(n);
             }

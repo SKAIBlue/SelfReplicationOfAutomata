@@ -7,8 +7,7 @@ import java.io.*;
  */
 public class ObjectSaver {
 
-    public static void save(Object obj,String name)
-    {
+    public static void save(Object obj, String name) {
         try {
             FileOutputStream fos = new FileOutputStream(name);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -21,8 +20,7 @@ public class ObjectSaver {
     }
 
 
-    public static Object load(String name)
-    {
+    public static Object load(String name) {
         try {
             FileInputStream fis = new FileInputStream(name);
             ObjectInputStream ois = new ObjectInputStream(fis);
@@ -36,6 +34,16 @@ public class ObjectSaver {
         return null;
     }
 
+
+    public static void save(String str, String name) {
+        try {
+            PrintWriter printWriter = new PrintWriter(name);
+            printWriter.write(str);
+            printWriter.flush();
+            printWriter.close();
+        } catch (Exception e) {
+        }
+    }
 
 
 }

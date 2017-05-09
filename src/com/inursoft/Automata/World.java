@@ -25,6 +25,8 @@ public class World {
     private int height = 0;
 
 
+
+
     public World(CMR cmr)
     {
         this.cmr = cmr;
@@ -158,11 +160,13 @@ public class World {
         int[][] world = toIntArray();
         int patternWidth = pattern[0].length;
         int patternHeight = pattern.length;
+        int widthAcc = patternWidth + 1;
+        int heightAcc = patternHeight + 1;
         int patternAreaSize = patternWidth * patternHeight;
         Fitness fitness = new Fitness();
-        for(int i = 0 ; i <= height ; i+=patternHeight)
+        for(int i = 1 ; i <= height ; i+=heightAcc)
         {
-            for(int j = 0; j <= width ; j+=patternWidth)
+            for(int j = 1; j <= width ; j+=widthAcc)
             {
                 int incount = 0;
                 for(int k = 0 ; k < patternHeight; k+=1)
@@ -178,13 +182,11 @@ public class World {
                         }
                     }
                 }
+                fitness.fitness += incount;
                 if(incount == patternAreaSize)
                 {
-                    fitness.match += 1;
-                }
-                else
-                {
-                    fitness.part += incount;
+                    fitness.perfectCount += 1;
+                    fitness.fitness *= 2;
                 }
             }
         }
@@ -327,6 +329,9 @@ public class World {
         }
         return world[y + 1][x];
     }
+
+
+
 
 
 }

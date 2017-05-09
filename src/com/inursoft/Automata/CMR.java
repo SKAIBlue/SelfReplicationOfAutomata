@@ -13,7 +13,10 @@ import java.util.Random;
 public class CMR implements Serializable {
 
 
-    public Fitness fitness = new Fitness();
+    public List<Integer> fitness = new ArrayList<>();
+
+
+    public boolean success = false;
 
 
     private Random rand = new Random();
@@ -58,6 +61,10 @@ public class CMR implements Serializable {
             String line;
             List<CellConditions> conditionsList = new ArrayList<>();
             while ((line = reader.readLine()) != null) {
+                if(line.length() == 0 )
+                {
+                    continue;
+                }
                 conditionsList.add(new CellConditions(line));
             }
 
@@ -89,11 +96,8 @@ public class CMR implements Serializable {
         {
             int index = integer / 11;
             int inIndex = integer % 11;
-            System.out.println(integer);
             conditions[index].mutate(inIndex);
         }
-        System.out.println(toString());
-
     }
 
 
@@ -144,6 +148,21 @@ public class CMR implements Serializable {
             builder.append(String.format("%s\n", condition.toString()));
         }
         return builder.toString();
+    }
+
+
+    public int getBestFitness()
+    {
+        int max = 0;
+        for(int i = 0 ; i < fitness.size(); i+=1)
+        {
+            int val = fitness.get(i);
+            if(val > max)
+            {
+                max = val;
+            }
+        }
+        return max;
     }
 
     /**

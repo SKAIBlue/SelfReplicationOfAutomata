@@ -240,7 +240,7 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
         System.out.println(build.toString());
     }
 
-    Fitness maxfitness = new Fitness();
+    int maxfitness = 0;
 
     private class AutoNextStateThread extends Thread
     {
@@ -270,30 +270,34 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
 
         @Override
         public void run() {
-            while(true)
+            for(int count = 0 ; count < 10; count +=1)
             {
                 while(gcmr.getGeneration() < 3000000)
                 {
                     for(int iterate = 0 ; iterate < 30; iterate +=1)
                     {
-                        Fitness best = new Fitness();
+                        int best = 0;
                         int bestIndex = 0;
                         for(int i = 0 ; i < worlds.size() ; i+=1)
                         {
                             World world = worlds.get(i);
                             world.nextState();
                             Fitness fitness = world.getPatternFitness(pattern);
-                            world.cmr.fitness = fitness;
-                            if(fitness.gt(best))
+                            world.cmr.fitness.add(fitness.fitness);
+                            if(fitness.fitness > best)
                             {
-                                best = fitness;
+                                best = fitness.fitness;
                                 bestIndex = i;
+                            }
+                            if(fitness.perfectCount > 4)
+                            {
+                                world.cmr.success = true;
                             }
                         }
 
-                        if(world.cmr.fitness.gt(maxfitness))
+                        if(world.cmr.getBestFitness() > maxfitness)
                         {
-                            maxfitness = world.cmr.fitness;
+                            maxfitness = world.cmr.getBestFitness();
                             world = worlds.get(bestIndex);
                             System.out.println("max fitness change: " + maxfitness);
                             ObjectSaver.save(world.cmr, "best.cmr");
@@ -304,6 +308,16 @@ public class WorldPanel extends JPanel implements GeneticCMR.OnGenerateListener{
                         //{
                         //repaint();
                         //}
+                    }
+                    for(int i = 0 ; i < worlds.size(); i +=1)
+                    {
+                        CMR cmr = worlds.get(i).cmr;
+                        if(cmr.success)
+                        {
+                            String fileName = String.format("%d_%04d_%d_%d", count, gcmr.getGeneration(), i, System.currentTimeMillis());
+                            System.out.println(String.format("조건을 찾았습니다 [%s]이름으로 저장합니다.",  fileName));
+                            ObjectSaver.save(cmr.toString(), fileName);
+                        }
                     }
                     if(gcmr.getGeneration() % 1000 == 0)
                     {
