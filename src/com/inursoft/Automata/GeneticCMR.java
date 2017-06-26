@@ -10,6 +10,15 @@ import java.util.Random;
  */
 public class GeneticCMR implements Serializable
 {
+
+    private Object locker = new Object();
+
+
+
+    private int iteration = 0;
+
+
+
     private int generation = 0;
     /**
      * 개수
@@ -27,6 +36,7 @@ public class GeneticCMR implements Serializable
      * 조건 최대값
      */
     private int conditionMaxValue = 10;
+
 
     private transient OnGenerateListener generateListener;
 
@@ -226,6 +236,25 @@ public class GeneticCMR implements Serializable
     {
         void onGenerate(CMR generatedCMR);
     }
+
+
+    public int getIteration()
+    {
+        synchronized (locker)
+        {
+            return iteration;
+        }
+    }
+
+
+    public void increaseIteration()
+    {
+        synchronized (locker)
+        {
+            iteration += 1;
+        }
+    }
+
 
 
 }

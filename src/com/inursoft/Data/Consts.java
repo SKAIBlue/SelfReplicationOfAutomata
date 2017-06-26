@@ -5,6 +5,8 @@ package com.inursoft.Data;
  */
 public class Consts {
 
+    public static Object locker = new Object();
+
     public static final int CMR_SIZE = 40;
 
 
@@ -19,5 +21,17 @@ public class Consts {
 
     public static final String FORM_TITLE = "Automata";
 
+
+    private static int iteration = 0;
+
+
+    public static int getIteration()
+    {
+        synchronized (locker)
+        {
+            int i = iteration++;
+            return i;
+        }
+    }
 
 }
