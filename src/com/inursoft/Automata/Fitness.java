@@ -5,8 +5,24 @@ package com.inursoft.Automata;
  */
 public class Fitness {
 
+
+
+
     public int fitness = 0;
 
+
+
     public int perfectCount = 0;
+
+
+
+    @Override
+    public String toString() {
+        return "Fitness{" +
+                "fitness=" + fitness +
+                ", perfectCount=" + perfectCount +
+                '}';
+    }
+
 
 }

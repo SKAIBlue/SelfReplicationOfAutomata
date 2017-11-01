@@ -13,19 +13,25 @@ import java.util.Random;
 public class CMR implements Serializable {
 
 
+
     public List<Integer> fitness = new ArrayList<>();
+
 
 
     public boolean success = false;
 
 
+
     private Random rand = new Random();
+
 
 
     private CellConditions[] conditions;
 
 
+
     private GeneticCMR geneticCMR;
+
 
 
     public CMR(GeneticCMR geneticCMR) {
@@ -79,11 +85,26 @@ public class CMR implements Serializable {
     }
 
 
+    public HashSet<Integer> randomIntegers(int m, int n)
+    {
+        HashSet<Integer> integers = new HashSet<>();
+        if(m == 0)
+            return integers;
+        integers.addAll(randomIntegers(m - 1, n - 1));
+        int i = Math.abs(rand.nextInt() % n);
+        if(integers.contains(i))
+            integers.add(n);
+        else
+            integers.add(i);
+        return integers;
+    }
+
 
     public void mutate() {
         int mutateValue = Math.abs(rand.nextInt()) % 3;
-        HashSet<Integer> integerSet = new HashSet<>();
-        while( integerSet.size()< mutateValue )
+        HashSet<Integer> integerSet = randomIntegers(mutateValue, geneticCMR.getCmrSize() * 11);
+        /*
+        while( integerSet.size() < mutateValue )
         {
             int newValue = Math.abs(rand.nextInt() % (geneticCMR.getCmrSize() * 11));
             if(!integerSet.contains(newValue))
@@ -91,6 +112,7 @@ public class CMR implements Serializable {
                 integerSet.add(newValue);
             }
         }
+        */
 
         for(Integer integer : integerSet)
         {
@@ -101,18 +123,20 @@ public class CMR implements Serializable {
     }
 
 
+
+
     public int conditionMatch(int east, int west, int center, int north, int south) {
         for (int i = 0; i < conditions.length; i += 1) {
             CellConditions condition = conditions[i];
 
             if (isMatchCondition(condition, east, west, center, north, south)) {
-                //System.out.println(String.format("E: %d W: %d C: %d N: %d S: %d", east, west,center,north,south));
-                //System.out.println(i+": " + condition.toString());
                 return condition.transValue;
             }
         }
         return center;
     }
+
+
 
 
     private void toArray(List<CellConditions> conditionsList) {
@@ -122,6 +146,8 @@ public class CMR implements Serializable {
             conditions[i] = conditionsList.get(i);
         }
     }
+
+
 
 
 
