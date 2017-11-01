@@ -34,6 +34,7 @@ class GeneticCMRTest {
             CMR c = sorted.get(i);
             System.out.println(c.fitness);
         }
+        
 
         System.out.println(String.format("정렬에 걸린 시간: %d", time));
     }
