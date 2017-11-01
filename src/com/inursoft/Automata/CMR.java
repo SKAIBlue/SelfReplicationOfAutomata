@@ -91,7 +91,7 @@ public class CMR implements Serializable {
         if(m == 0)
             return integers;
         integers.addAll(randomIntegers(m - 1, n - 1));
-        int i = Math.abs(rand.nextInt() % n);
+        int i = Math.abs(rand.nextInt()) % n;
         if(integers.contains(i))
             integers.add(n);
         else
@@ -100,9 +100,10 @@ public class CMR implements Serializable {
     }
 
 
+
     public void mutate() {
         int mutateValue = Math.abs(rand.nextInt()) % 3;
-        HashSet<Integer> integerSet = randomIntegers(mutateValue, geneticCMR.getCmrSize() * 11);
+        HashSet<Integer> integerSet = randomIntegers(mutateValue, geneticCMR.getCmrSize() * 11 - 1);
         /*
         while( integerSet.size() < mutateValue )
         {
